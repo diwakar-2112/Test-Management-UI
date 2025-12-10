@@ -1,0 +1,223 @@
+/* --- Page Background with Dot Pattern and Gradients --- */
+.page-background {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0b1121; /* Deep dark blue */
+  
+  /* The Dot Pattern */
+  background-image: radial-gradient(#2d3748 1px, transparent 1px);
+  background-size: 40px 40px;
+  
+  /* The Ambient Glows (Purple/Blue blobs) */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pseudo-elements for the purple ambient glow effects */
+.page-background::before, .page-background::after {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 0;
+}
+
+.page-background::before {
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+}
+
+.page-background::after {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+  bottom: -100px;
+  right: -100px;
+}
+
+/* --- The Login Card --- */
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 400px;
+  background: #13161c; /* Dark Card Background */
+  border: 1px solid #2d323e;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  font-family: 'Inter', sans-serif; /* Ensure you have a nice font loaded */
+}
+
+/* --- Header Styling --- */
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.icon-container {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 20px auto;
+  background: linear-gradient(135deg, #d946ef, #8b5cf6); /* Pink to Purple gradient */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(217, 70, 239, 0.4);
+}
+
+.header-section h1 {
+  color: #ffffff;
+  font-size: 1.8rem;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+}
+
+.header-section p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* --- Form Styling --- */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgot-link {
+  color: #a78bfa;
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.full-width {
+  width: 100%;
+}
+
+:host ::ng-deep .custom-input {
+  width: 100%;
+  background-color: #1a1e29 !important;
+  border: 1px solid #334155 !important;
+  color: #e2e8f0 !important;
+  padding-left: .5rem !important; /* Space for icon */
+  border-radius: 8px !important;
+  height: 45px;
+}
+
+:host ::ng-deep .custom-input:focus {
+  border-color: #8b5cf6 !important; /* Purple focus border */
+  box-shadow: 0 0 0 1px #8b5cf6 !important;
+}
+
+:host ::ng-deep .p-input-icon-left > i {
+  color: #64748b;
+  top: 50%;
+  margin-top: -0.5rem;
+}
+
+/* --- Gradient Button --- */
+:host ::ng-deep .gradient-button .p-button {
+  background: linear-gradient(90deg, #8b5cf6 0%, #3b82f6 100%);
+  border: none;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+  transition: transform 0.2s;
+}
+
+:host ::ng-deep .gradient-button .p-button:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(90deg, #7c3aed 0%, #2563eb 100%);
+}
+
+.full-width-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* --- Divider --- */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 25px 0;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #334155;
+}
+
+.divider span {
+  padding: 0 10px;
+}
+
+/* --- Social Buttons --- */
+.social-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+:host ::ng-deep .social-btn {
+  background-color: #1a1e29 !important;
+  border: 1px solid #334155 !important;
+  color: white !important;
+  flex: 1;
+  justify-content: center;
+  border-radius: 8px !important;
+  padding: 10px !important;
+  font-weight: 500;
+}
+
+:host ::ng-deep .social-btn:hover {
+  background-color: #2d3748 !important;
+  border-color: #475569 !important;
+}
+
+/* --- Footer --- */
+.footer {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.footer a {
+  color: #d8b4fe;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.footer a:hover {
+  color: #c084fc;
+}
