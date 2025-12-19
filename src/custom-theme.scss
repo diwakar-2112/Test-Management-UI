@@ -1,0 +1,82 @@
+@use '@angular/material' as mat;
+
+/* =========================================================
+   1. LIGHT THEME CONFIGURATION
+   ========================================================= */
+
+$light-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$azure-palette,    // Light mode primary
+    tertiary: mat.$blue-palette,
+  ),
+  typography: (
+    plain-family: 'Roboto, sans-serif',
+  ),
+  density: (
+    scale: 0
+  )
+));
+
+/* =========================================================
+   2. DARK THEME CONFIGURATION (DIFFERENT COLORS)
+   ========================================================= */
+
+$dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$violet-palette,   // 👈 CHANGED COLOR
+    tertiary: mat.$rose-palette,    // 👈 CHANGED COLOR
+  ),
+  typography: (
+    plain-family: 'Roboto, sans-serif',
+  )
+));
+
+/* =========================================================
+   3. APPLY LIGHT THEME (DEFAULT)
+   ========================================================= */
+
+html {
+  @include mat.core(); // include once
+  @include mat.all-component-themes($light-theme);
+
+  /* Global Light Theme Colors */
+  background-color: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
+  font-family: Roboto, sans-serif;
+
+  color-scheme: light;
+}
+
+/* =========================================================
+   4. APPLY DARK THEME (WHEN CLASS EXISTS)
+   ========================================================= */
+html.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+
+  /* FORCE CONSISTENT DARK BACKGROUND */
+  --mat-sys-background: rgb(84, 125, 190);
+  --mat-sys-surface: rgb(84, 125, 190);
+
+  --mat-sys-surface-container: rgb(84, 125, 190);
+  --mat-sys-surface-container-low: rgb(84, 125, 190);
+  --mat-sys-surface-container-high: rgb(84, 125, 190);
+  --mat-sys-surface-container-highest: rgb(84, 125, 190);
+
+  /* Optional elevation contrast */
+  --mat-sys-surface-tint: transparent;
+
+  background-color: rgb(84, 125, 190);
+  color-scheme: dark;
+}
+
+/* =========================================================
+   5. GLOBAL BODY RESET
+   ========================================================= */
+
+body {
+  margin: 0;
+  background-color: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
+}
