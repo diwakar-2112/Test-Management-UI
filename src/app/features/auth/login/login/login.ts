@@ -22,20 +22,20 @@ import { ProjectService as commonService } from '../../../../../services/project
   selector: 'app-login',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    CardModule, 
-    InputTextModule, 
-    PasswordModule, 
+    CommonModule,
+    ReactiveFormsModule,
+    CardModule,
+    InputTextModule,
+    PasswordModule,
     ButtonModule,
     MessageModule,
     CheckboxModule,
     DividerModule,
     TabsModule
-    
+
   ],
-  templateUrl:'./login.html',
-  styleUrls:['./login.css']
+  templateUrl: './login.html',
+  styleUrls: ['./login.css']
 })
 export class Login {
   private fb = inject(FormBuilder);
@@ -45,26 +45,67 @@ export class Login {
   isLoading = signal(false);
   errorMessage = signal('');
 
+  isRegisterMode = signal(false);
   loginForm = this.fb.group({
     username: ['', Validators.required],
-    password: ['', Validators.required]
+    password: ['', Validators.required],
+    // confirmPassword: [{ value: '', disabled: true }, Validators.required]
   });
+
+  toggleMode() {
+    this.isRegisterMode.update((v) => !v);
+    // if (this.isRegisterMode()) {
+    //   this.loginForm.get('confirmPassword')?.enable();
+    // } else {
+    //   this.loginForm.get('confirmPassword')?.disable();
+    // }
+    this.errorMessage.set('');
+    this.loginForm.reset();
+  }
 
   onSubmit() {
     if (this.loginForm.invalid) return;
+
     this.isLoading.set(true);
     this.errorMessage.set('');
-    const credentials = this.loginForm.value;
+    const credentials = this.loginForm.getRawValue(); // use getRawValue to get disabled fields if needed, but here we enable it
 
-    this.authService.login(credentials).subscribe({
+    if (this.isRegisterMode()) {
+      // if (credentials.password !== credentials.confirmPassword) {
+      //   this.errorMessage.set('Passwords do not match');
+      //   this.isLoading.set(false);
+      //   return;
+      // }
+      this.register(credentials);
+    } else {
+      this.authService.login(credentials).subscribe({
+        next: (res) => {
+          console.log('Login Success:', res);
+          this.isLoading.set(false);
+          // Navigate to the Dashboard/Projects page after success
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          console.error('Login Failed:', err);
+          this.isLoading.set(false);
+          this.errorMessage.set('Invalid credentials. Please try again.');
+        }
+      });
+    }
+  }
+
+  register(data: any) {
+
+    this.authService.register(data).subscribe({
       next: (res) => {
-        console.log('Login Success:', res);
+        console.log('Register Success:', res);
         this.isLoading.set(false);
         // Navigate to the Dashboard/Projects page after success
-        this.router.navigate(['/dashboard']);
+        this.isRegisterMode();
+        this.router.navigate(['/login']);
       },
       error: (err) => {
-        console.error('Login Failed:', err);
+        console.error('Register Failed:', err);
         this.isLoading.set(false);
         this.errorMessage.set('Invalid credentials. Please try again.');
       }
