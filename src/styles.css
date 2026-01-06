@@ -1,11 +1,61 @@
-/* You can add global styles to this file, and also import other style files */
-body{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 249 250 251;   /* Gray 50 */
+    --surface: 255 255 255;      /* White */
+    --surface-highlight: 243 244 246; /* Gray 100 */
+    --border: 229 231 235;       /* Gray 200 */
+    
+    --text-main: 17 24 39;       /* Gray 900 */
+    --text-secondary: 107 114 128; /* Gray 500 */
+    
+    --primary: 79 70 229;        /* Indigo 600 */
+    --primary-light: 224 231 255; /* Indigo 100 */
+    --primary-fg: 255 255 255;
+  }
+
+  .dark {
+    --background: 10 10 12;      /* Deepest Black */
+    --surface: 20 20 24;         /* Rich Dark Gray */
+    --surface-highlight: 30 30 35; 
+    --border: 39 39 42;          /* Zinc 800 */
+    
+    --text-main: 243 244 246;    /* Gray 100 */
+    --text-secondary: 156 163 175; /* Gray 400 */
+    
+    --primary: 249 115 22;       /* Orange 500 */
+    --primary-light: 67 20 7;    /* Dark Orange Tint */
+    --primary-fg: 255 255 255;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    @apply bg-background text-text-main antialiased transition-colors duration-300 overflow-x-hidden;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}

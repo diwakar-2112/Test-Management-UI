@@ -1,6 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+// import { ThemeService } from '@primeuix/themes';
 import { ButtonModule } from 'primeng/button';
+import { ThemeService } from '../services/theme.service.ts';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet,ButtonModule],
@@ -9,5 +11,5 @@ import { ButtonModule } from 'primeng/button';
 })
 export class App {
   protected readonly title = signal('test-management');
-  
+    private themeService = inject(ThemeService);
 }

@@ -7,21 +7,21 @@ import { DOCUMENT } from '@angular/common';
 export class ThemeService {
   private document = inject(DOCUMENT);
   
-  // Signal to hold the current theme state ('light' or 'dark')
+  // Default 'dark' agar local storage mein kuch nahi hai
   themeSignal = signal<'light' | 'dark'>(this.getInitialTheme());
 
   constructor() {
-    // Effect runs whenever themeSignal changes
     effect(() => {
       const theme = this.themeSignal();
-      
+      const html = this.document.documentElement;
+
+      // Tailwind expects 'dark' class on <html>
       if (theme === 'dark') {
-        this.document.documentElement.classList.add('dark-theme');
+        html.classList.add('dark');
       } else {
-        this.document.documentElement.classList.remove('dark-theme');
+        html.classList.remove('dark');
       }
       
-      // Save to local storage
       localStorage.setItem('user-theme', theme);
     });
   }
@@ -32,9 +32,7 @@ export class ThemeService {
 
   private getInitialTheme(): 'light' | 'dark' {
     const savedTheme = localStorage.getItem('user-theme') as 'light' | 'dark';
-    if (savedTheme) return savedTheme;
-
-    // Optional: Check system preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    // Logic: Agar saved nahi hai, toh Default DARK return karo
+    return savedTheme ? savedTheme : 'dark';
   }
 }
