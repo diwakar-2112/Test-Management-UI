@@ -4,34 +4,24 @@
    1. LIGHT THEME CONFIGURATION
    ========================================================= */
 
-$light-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$azure-palette,    // Light mode primary
-    tertiary: mat.$blue-palette,
-  ),
-  typography: (
-    plain-family: 'Roboto, sans-serif',
-  ),
-  density: (
-    scale: 0
-  )
-));
+$light-theme: mat.define-theme((color: (theme-type: light,
+        primary: mat.$azure-palette, // Light mode primary
+        tertiary: mat.$blue-palette,
+      ),
+      typography: (plain-family: 'Roboto, sans-serif',
+      ),
+      density: (scale: 0)));
 
 /* =========================================================
    2. DARK THEME CONFIGURATION (DIFFERENT COLORS)
    ========================================================= */
 
-$dark-theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-    primary: mat.$violet-palette,   // 👈 CHANGED COLOR
-    tertiary: mat.$rose-palette,    // 👈 CHANGED COLOR
-  ),
-  typography: (
-    plain-family: 'Roboto, sans-serif',
-  )
-));
+$dark-theme: mat.define-theme((color: (theme-type: dark,
+        primary: mat.$violet-palette, // 👈 CHANGED COLOR
+        tertiary: mat.$rose-palette, // 👈 CHANGED COLOR
+      ),
+      typography: (plain-family: 'Roboto, sans-serif',
+      )));
 
 /* =========================================================
    3. APPLY LIGHT THEME (DEFAULT)
@@ -52,7 +42,7 @@ html {
 /* =========================================================
    4. APPLY DARK THEME (WHEN CLASS EXISTS)
    ========================================================= */
-html.dark-theme {
+html.dark {
   @include mat.all-component-colors($dark-theme);
 
   /* FORCE CONSISTENT DARK BACKGROUND */

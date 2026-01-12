@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
   ],
   templateUrl: './project-list.html',
   styleUrl: './project-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectList {
 

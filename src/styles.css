@@ -6,30 +6,45 @@
 
 @layer base {
   :root {
-    --background: 249 250 251;   /* Gray 50 */
-    --surface: 255 255 255;      /* White */
-    --surface-highlight: 243 244 246; /* Gray 100 */
-    --border: 229 231 235;       /* Gray 200 */
-    
-    --text-main: 17 24 39;       /* Gray 900 */
-    --text-secondary: 107 114 128; /* Gray 500 */
-    
-    --primary: 79 70 229;        /* Indigo 600 */
-    --primary-light: 224 231 255; /* Indigo 100 */
+    --background: 249 250 251;
+    /* Gray 50 */
+    --surface: 255 255 255;
+    /* White */
+    --surface-highlight: 243 244 246;
+    /* Gray 100 */
+    --border: 229 231 235;
+    /* Gray 200 */
+
+    --text-main: 17 24 39;
+    /* Gray 900 */
+    --text-secondary: 107 114 128;
+    /* Gray 500 */
+
+    --primary: 79 70 229;
+    /* Indigo 600 */
+    --primary-light: 224 231 255;
+    /* Indigo 100 */
     --primary-fg: 255 255 255;
   }
 
   .dark {
-    --background: 10 10 12;      /* Deepest Black */
-    --surface: 20 20 24;         /* Rich Dark Gray */
-    --surface-highlight: 30 30 35; 
-    --border: 39 39 42;          /* Zinc 800 */
-    
-    --text-main: 243 244 246;    /* Gray 100 */
-    --text-secondary: 156 163 175; /* Gray 400 */
-    
-    --primary: 249 115 22;       /* Orange 500 */
-    --primary-light: 67 20 7;    /* Dark Orange Tint */
+    --background: 10 10 12;
+    /* Deepest Black */
+    --surface: 20 20 24;
+    /* Rich Dark Gray */
+    --surface-highlight: 30 30 35;
+    --border: 39 39 42;
+    /* Zinc 800 */
+
+    --text-main: 243 244 246;
+    /* Gray 100 */
+    --text-secondary: 156 163 175;
+    /* Gray 400 */
+
+    --primary: 249 115 22;
+    /* Orange 500 */
+    --primary-light: 67 20 7;
+    /* Dark Orange Tint */
     --primary-fg: 255 255 255;
   }
 
@@ -44,16 +59,37 @@
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   @apply bg-gray-300 dark:bg-gray-700 rounded-full;
 }
+
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }

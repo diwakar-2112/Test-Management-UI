@@ -7,7 +7,6 @@ import { DOCUMENT } from '@angular/common';
 export class ThemeService {
   private document = inject(DOCUMENT);
   
-  // Default 'dark' agar local storage mein kuch nahi hai
   themeSignal = signal<'light' | 'dark'>(this.getInitialTheme());
 
   constructor() {
@@ -32,7 +31,6 @@ export class ThemeService {
 
   private getInitialTheme(): 'light' | 'dark' {
     const savedTheme = localStorage.getItem('user-theme') as 'light' | 'dark';
-    // Logic: Agar saved nahi hai, toh Default DARK return karo
     return savedTheme ? savedTheme : 'dark';
   }
 }

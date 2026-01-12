@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectService } from '../../../services/project.service';
 import { ProjectList } from '../projects/project-list/project-list';
@@ -23,30 +23,37 @@ import { ThemeService } from '../../../services/theme.service.ts';
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css', // Ensure styles.scss/css matches
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dashboard implements OnInit {
   private projectService = inject(ProjectService);
   themeService = inject(ThemeService);
-  
+
   // Mobile Sidebar State
   isMobileMenuOpen = signal(false);
-
-  projectCount = signal(0);
-  userName = signal('Admin User');
-  
+ ngOnInit(): void {
+    this.goToProject();
+  }
+  private router = inject(Router);
+  projectCount=signal(0);
+  userName=signal('');
   initials = computed(() => {
     const name = this.userName();
-    const parts = name.split(' ');
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase();
-    }
-    return (name[0] || 'A').toUpperCase();
-  });
+  const parts = name.split(' ');
+  return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
+});
+  goToProject(){
+    this.projectService.getAllProjects(0,10).subscribe({
+      next:(res=>{
+        console.log(res);
+        this.userName.set(localStorage?.getItem('userName')??'');
+        this.projectCount.set(res?.content?.length);
+      }),
+      error:(err=>{
 
-  ngOnInit(): void {
-    // Mock Data Load (Replace with your actual API call)
-    this.projectCount.set(12); 
-    // Logic for loading real data...
+      })
+    })
+    // this.router.navigate(['/projects'])
   }
 
   toggleTheme() {
