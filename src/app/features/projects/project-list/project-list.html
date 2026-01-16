@@ -59,6 +59,7 @@
   <div class="flex items-center justify-between mb-6 px-1">
     <h3 class="text-lg font-bold text-text-main">All Projects</h3>
     <button [pTooltip]="tooltipContent" severity="secondary" tooltipPosition="bottom"
+      (click)="openNewProject(createProjectModal)"
       class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/30 transition-all hover:bg-orange-600 hover:shadow-orange-500/40 hover:-translate-y-1 active:scale-95">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path d="M12 4v16m8-8H4" />
@@ -66,11 +67,11 @@
       New Project
     </button>
     <ng-template #tooltipContent>
-    <div class="flex items-center">
-        
+      <div class="flex items-center">
+
         <span> <b>Create Project</b> </span>
-    </div>
-</ng-template>
+      </div>
+    </ng-template>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -156,3 +157,64 @@
     }
   </div>
 </section>
+
+<!-- modals -->
+<ng-template #createProjectModal let-ref>
+  <div class="px-1 py-1">
+    <p class="text-sm text-text-secondary mb-6 ml-1">
+      Fill in the details below to kickstart your new testing project.
+    </p>
+
+    <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+
+      <!-- Name Field -->
+      <div class="flex flex-col gap-2">
+        <label for="name" class="text-[11px] font-bold text-text-secondary uppercase tracking-widest ml-1">
+          Project Name
+        </label>
+        <div class="relative group">
+          <input pInputText id="name" formControlName="name"
+            class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium text-text-main placeholder:text-text-secondary/50 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-sm group-hover:border-primary/30"
+            placeholder="e.g. E-Commerce Backend Tests" />
+        </div>
+        @if (projectForm.get('name')?.invalid && projectForm.get('name')?.touched) {
+        <small class="text-red-500 text-xs font-bold ml-1 animate-pulse">
+          Project name is required.
+        </small>
+        }
+      </div>
+
+      <!-- Description Field -->
+      <div class="flex flex-col gap-2">
+        <label for="description" class="text-[11px] font-bold text-text-secondary uppercase tracking-widest ml-1">
+          Description
+        </label>
+        <div class="relative group">
+          <textarea pInputTextarea id="description" formControlName="description" rows="4"
+            class="w-full p-4 bg-background border border-border rounded-xl text-sm font-medium text-text-main placeholder:text-text-secondary/50 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-sm resize-none group-hover:border-primary/30"
+            placeholder="Briefly describe the scope and purpose..."></textarea>
+        </div>
+        @if (projectForm.get('description')?.invalid && projectForm.get('description')?.touched) {
+        <small class="text-red-500 text-xs font-bold ml-1 animate-pulse">
+          Description is required.
+        </small>
+        }
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-end gap-3   border-border/50">
+        <button type="button" (click)="onCancel()"
+          class="px-5 py-2.5 rounded-xl text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main border border-transparent hover:border-border/50 transition-all duration-200">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="projectForm.invalid" 
+          class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-white text-sm font-bold shadow-lg shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none hover:bg-orange-600 hover:shadow-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-200">
+          <span>Create Project</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

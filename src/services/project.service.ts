@@ -38,5 +38,15 @@ export class ProjectService {
             })
         )
     }
+    createProject(body:any):Observable<any>{
+        return this.api.post<any>('projects',body).pipe(
+            tap((response)=>{
+                if(response){
+                    console.log("project created successfully");
+                    
+                }
+            })
+        )
+    }
 
 }
