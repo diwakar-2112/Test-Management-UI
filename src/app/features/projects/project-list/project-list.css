@@ -1,13 +1,1 @@
-.project-card {
- 
-   background-color: var(--mat-sys--container); 
-  /* color: var(--mat-sys-on-surface);
-  border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: 12px;
-  padding: 16px; */
-  
-  
-  .meta-text {
-    color: var(--mat-sys-on-surface-variant);
-  }
-}
+/* CSS moved to Tailwind utility classes in HTML */
