@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../../services/theme.service.ts';
+import { ProjectScreen } from '../project-screen/project-screen';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +20,8 @@ import { ThemeService } from '../../../services/theme.service.ts';
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
-    ProjectList
+    ProjectList,
+    ProjectScreen
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css', // Ensure styles.scss/css matches
@@ -28,6 +30,7 @@ import { ThemeService } from '../../../services/theme.service.ts';
 export class Dashboard implements OnInit {
   private projectService = inject(ProjectService);
   themeService = inject(ThemeService);
+  // currentScreen=signal(true);
 
   // Mobile Sidebar State
   isMobileMenuOpen = signal(false);

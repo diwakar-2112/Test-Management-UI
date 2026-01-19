@@ -8,7 +8,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-
+import { Router } from '@angular/router';
 
 
 
@@ -28,6 +28,7 @@ export class ProjectList implements OnInit {
   }
   commonService = inject(ProjectService);
   modalService = inject(ModalService);
+  router = inject(Router);
   fb = inject(FormBuilder);
   products = signal<Project[]>([]);
 
@@ -83,5 +84,7 @@ export class ProjectList implements OnInit {
   onCancel() {
     this.modalService.close();
   }
-
+openProject(){
+  // this.router.navigateByUrl()
+}
 }
