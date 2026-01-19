@@ -1,16 +1,16 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, Signal, signal, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProjectService } from '../../../../services/project.service';
-import { Project, ProjectListResponse } from '../../../core/model/model';
+import { ProjectService } from '../../../services/project.service';
+import { Project, ProjectListResponse } from '../../core/model/model';
 import { TooltipModule } from 'primeng/tooltip';
-import { ModalService } from '../../../core/services/modal.service';
+import { ModalService } from '../../core/services/modal.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 
-// 
-import { Dialog } from 'primeng/dialog';
+
+
 
 @Component({
   selector: 'app-project-list',

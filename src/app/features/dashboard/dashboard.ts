@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectService } from '../../../services/project.service';
-import { ProjectList } from '../projects/project-list/project-list';
+import { ProjectList } from '../project-list/project-list';
 // Material Imports
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';

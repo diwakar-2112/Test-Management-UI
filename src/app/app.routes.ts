@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ProjectList } from './features/projects/project-list/project-list';
+import { ProjectList } from './features/project-list/project-list';
 import { Dashboard } from './features/dashboard/dashboard';
 import { Login } from './features/auth/login/login/login';
 import { authGuard } from './core/authGuard/auth-guard';
