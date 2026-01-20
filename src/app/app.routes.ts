@@ -1,32 +1,36 @@
 import { Routes } from '@angular/router';
-import { ProjectList } from './features/project-list/project-list';
-import { Dashboard } from './features/dashboard/dashboard';
-import { Login } from './features/auth/login/login/login';
-import { ProjectScreen } from './features/project-screen/project-screen';
+import { MainLayoutComponent } from './core/layout/main-layout/main-layout.component';
 import { authGuard } from './core/authGuard/auth-guard';
+
 export const routes: Routes = [
   {
     path: 'login',
-    component: Login
-  },
-  {
-    path:'dashboard',
-    component:Dashboard,
-    // canActivate:[authGuard]
-  },
-  {
-    path:'projects',
-    component:ProjectList,
-    // canActivate:[authGuard]
-  },
-  {
-    path: 'project-screen',
-    component:ProjectScreen,
+    loadComponent: () => import('./features/auth/login/login/login').then(m => m.Login)
   },
   {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
+    component: MainLayoutComponent,
+    canActivate: [authGuard], // Uncomment when ready to enforce auth
+    children: [
+      {
+        path: '',
+        redirectTo: 'projects',
+        pathMatch: 'full'
+      },
+      {
+        path: 'projects',
+        loadComponent: () => import('./features/project-list/project-list').then(m => m.ProjectList)
+      },
+      {
+        path: 'projects/:projectId',
+        loadComponent: () => import('./features/project-screen/project-screen').then(m => m.ProjectScreen)
+      },
+      {
+        path: 'dashboard',
+        redirectTo: 'projects',
+        pathMatch: 'full'
+      }
+    ]
   },
   {
     path: '**',

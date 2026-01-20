@@ -68,7 +68,7 @@ export class ProjectList implements OnInit {
       }
       this.commonService.createProject(body).subscribe({
         next: (res) => {
-          if(res){
+          if (res) {
             this.getProjects();
           }
 
@@ -84,7 +84,7 @@ export class ProjectList implements OnInit {
   onCancel() {
     this.modalService.close();
   }
-openProject(){
-  // this.router.navigateByUrl()
-}
+  openProject(id: number | string) {
+    this.router.navigate(['/projects', id]);
+  }
 }

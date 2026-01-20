@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonModule } from '@angular/common';
-import { ThemeService } from '../../../services/theme.service.ts';
+import { ThemeService } from '../../../services/theme.service';
 import { ProjectScreen } from '../project-screen/project-screen';
 
 @Component({
@@ -34,25 +34,25 @@ export class Dashboard implements OnInit {
 
   // Mobile Sidebar State
   isMobileMenuOpen = signal(false);
- ngOnInit(): void {
+  ngOnInit(): void {
     this.goToProject();
   }
   private router = inject(Router);
-  projectCount=signal(0);
-  userName=signal('');
+  projectCount = signal(0);
+  userName = signal('');
   initials = computed(() => {
     const name = this.userName();
-  const parts = name.split(' ');
-  return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
-});
-  goToProject(){
-    this.projectService.getAllProjects(0,10).subscribe({
-      next:(res=>{
+    const parts = name.split(' ');
+    return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
+  });
+  goToProject() {
+    this.projectService.getAllProjects(0, 10).subscribe({
+      next: (res => {
         console.log(res);
-        this.userName.set(localStorage?.getItem('userName')??'');
+        this.userName.set(localStorage?.getItem('userName') ?? '');
         this.projectCount.set(res?.content?.length);
       }),
-      error:(err=>{
+      error: (err => {
 
       })
     })
