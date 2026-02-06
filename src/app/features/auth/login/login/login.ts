@@ -10,13 +10,14 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 
-
 import { CheckboxModule } from 'primeng/checkbox';
 import { TabsModule } from 'primeng/tabs';
 import { DividerModule } from 'primeng/divider';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 // import { AuthService } from '../../../core/auth/auth.service';
-import { ProjectService as commonService } from '../../../../../services/project.service';
+import { CommonService as commonService } from '../../../../../services/commonService';
 
 @Component({
   selector: 'app-login',
@@ -31,19 +32,29 @@ import { ProjectService as commonService } from '../../../../../services/project
     MessageModule,
     CheckboxModule,
     DividerModule,
-    TabsModule
-
+    TabsModule,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './login.html',
-  styleUrls: ['./login.css']
+  styleUrls: ['./login.css'],
 })
 export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(commonService);
   private router = inject(Router);
-
-  isLoading = signal(false);
+  private messageService = inject(MessageService);
+  showError() {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: this.errorMessage(),
+      sticky: true,
+    });
+  }
   errorMessage = signal('');
+  isLoading = signal(false);
+  isSignupMode = signal(false);
 
   isRegisterMode = signal(false);
   loginForm = this.fb.group({
@@ -70,45 +81,47 @@ export class Login {
     this.errorMessage.set('');
     const credentials = this.loginForm.getRawValue(); // use getRawValue to get disabled fields if needed, but here we enable it
 
-    if (this.isRegisterMode()) {
+    if (this.isSignupMode()) {
       // if (credentials.password !== credentials.confirmPassword) {
       //   this.errorMessage.set('Passwords do not match');
       //   this.isLoading.set(false);
       //   return;
       // }
+      console.log('yes regis mode');
+
       this.register(credentials);
     } else {
+      console.log('login mode');
+
       this.authService.login(credentials).subscribe({
         next: (res) => {
           console.log('Login Success:', res);
           this.isLoading.set(false);
-          // Navigate to the Dashboard/Projects page after success
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           console.error('Login Failed:', err);
           this.isLoading.set(false);
-          this.errorMessage.set('Invalid credentials. Please try again.');
-        }
+          this.errorMessage.set(err.error.message);
+          this.showError();
+        },
       });
     }
   }
 
   register(data: any) {
-
     this.authService.register(data).subscribe({
       next: (res) => {
         console.log('Register Success:', res);
         this.isLoading.set(false);
         // Navigate to the Dashboard/Projects page after success
         this.isRegisterMode();
-        this.router.navigate(['/login']);
+        this.isSignupMode.update((v) => !v);
       },
       error: (err) => {
-        console.error('Register Failed:', err);
         this.isLoading.set(false);
         this.errorMessage.set('Invalid credentials. Please try again.');
-      }
+      },
     });
   }
 
@@ -116,5 +129,10 @@ export class Login {
   isFieldInvalid(field: string): boolean {
     const control = this.loginForm.get(field);
     return !!(control?.invalid && (control?.dirty || control?.touched));
+  }
+  toggleSign() {
+    this.isSignupMode.update((v) => !v);
+    this.errorMessage.set('');
+    this.loginForm.reset();
   }
 }

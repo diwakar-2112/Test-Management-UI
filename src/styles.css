@@ -1,9 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Define the layer name */
+@layer tailwind-base; 
 
+/* Put Tailwind inside the layer so it has lower priority than PrimeNG */
+@layer tailwind-base {
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+}
 @layer base {
   :root {
     --background: 249 250 251;
@@ -93,4 +98,47 @@
   100% {
     transform: translateX(100%);
   }
+}
+/* src/styles.css */
+
+
+
+
+/* src/styles.css - Fix PrimeNG Toast vs Tailwind */
+
+/* 1. Ensure content aligns to the top (default), not center */
+.p-toast-message-content {
+    align-items: flex-start;
+}
+
+/* 2. Fix the Close Button size and shape (Tailwind often breaks this) */
+.p-toast-icon-close {
+    width: 2rem;            /* specific clickable size */
+    height: 2rem;
+    border-radius: 50%;     /* ensure circular ripple/hover */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    padding: 0;
+    border: none;
+    margin-top: -0.25rem;   /* Pull button up slightly to align with top text */
+}
+
+/* 3. Fix the Status Icon (Check/Error icon) alignment */
+.p-toast-message-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.25rem;    /* Push icon down slightly to align with text baseline */
+}
+
+/* 4. Ensure Typography is clean */
+.p-toast-summary {
+    font-weight: 700;
+ /* Space between "Error" and the details */
+    display: block;
+}
+.p-toast-message-text{
+  display: inline !important;
 }

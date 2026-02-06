@@ -12,10 +12,13 @@ export interface LoginResponse {
 })
 
 
-export class ProjectService {
+export class CommonService {
     private api = inject(ApiService);
     getAllProjects(page: number = 0, size: number = 10): Observable<any> {
         return this.api.regularGetRequest<any>('projects', { page, size });
+    }
+    getProjectById(id:any){
+        return this.api.regularGetRequest<any>(`projects/${id}`);
     }
 
     login(body: any): Observable<any> {

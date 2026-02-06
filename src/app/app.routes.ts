@@ -4,19 +4,14 @@ import { authGuard } from './core/authGuard/auth-guard';
 
 export const routes: Routes = [
   {
-    path: 'login',
+    path: '',
     loadComponent: () => import('./features/auth/login/login/login').then(m => m.Login)
   },
   {
     path: '',
     component: MainLayoutComponent,
-    canActivate: [authGuard], // Uncomment when ready to enforce auth
+    canActivate: [authGuard],
     children: [
-      {
-        path: '',
-        redirectTo: 'projects',
-        pathMatch: 'full'
-      },
       {
         path: 'projects',
         loadComponent: () => import('./features/project-list/project-list').then(m => m.ProjectList)

@@ -3,7 +3,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ThemeService } from '../../../../services/theme.service';
-import { ProjectService } from '../../../../services/project.service';
+import { CommonService } from '../../../../services/commonService';
 
 @Component({
     selector: 'app-main-layout',
@@ -19,7 +19,7 @@ import { ProjectService } from '../../../../services/project.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainLayoutComponent implements OnInit {
-    private projectService = inject(ProjectService);
+    private projectService = inject(CommonService);
     themeService = inject(ThemeService);
 
     // Mobile Sidebar State

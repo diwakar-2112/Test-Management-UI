@@ -4,6 +4,9 @@
       projectId() }}</span></p>
 
   <div class="mt-8 p-6 bg-surface border border-border rounded-2xl">
-    <p class="text-text-main">This is where the project specific dashboard will live.</p>
+    <p class="text-text-main">Number of project updates in the past week.</p>
+    <div class="card">
+      <p-chart type="line" [data]="data" [options]="options" class="h-[20rem]" />
+    </div>
   </div>
 </div>

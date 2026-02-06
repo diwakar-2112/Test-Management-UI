@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ProjectService } from '../../../services/project.service';
+import { CommonService } from '../../../services/commonService';
 import { ProjectList } from '../project-list/project-list';
 // Material Imports
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -21,14 +21,13 @@ import { ProjectScreen } from '../project-screen/project-screen';
     MatIconModule,
     MatToolbarModule,
     ProjectList,
-    ProjectScreen
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css', // Ensure styles.scss/css matches
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dashboard implements OnInit {
-  private projectService = inject(ProjectService);
+  private projectService = inject(CommonService);
   themeService = inject(ThemeService);
   // currentScreen=signal(true);
 
