@@ -49,7 +49,6 @@ export class Login {
       severity: 'error',
       summary: 'Error',
       detail: this.errorMessage(),
-      sticky: true,
     });
   }
   errorMessage = signal('');
@@ -120,7 +119,8 @@ export class Login {
       },
       error: (err) => {
         this.isLoading.set(false);
-        this.errorMessage.set('Invalid credentials. Please try again.');
+        this.errorMessage.set(err.error.message);
+        this.showError();
       },
     });
   }

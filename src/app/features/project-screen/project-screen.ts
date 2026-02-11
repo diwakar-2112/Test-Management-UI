@@ -8,12 +8,13 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import { Project } from '../../core/model/model';
 
 @Component({
     selector: 'app-project-screen',
     standalone: true,
-    imports: [CommonModule, ChartModule,ToastModule,ButtonModule,RippleModule],
-    providers:[MessageService],
+    imports: [CommonModule, ChartModule, ToastModule, ButtonModule, RippleModule],
+    providers: [MessageService],
     templateUrl: './project-screen.html',
     styleUrl: './project-screen.css',
 })
@@ -25,12 +26,14 @@ export class ProjectScreen implements OnInit {
     commonDataService = inject(CommonDataService);
     commonService = inject(CommonService);
 
+    project = signal<Project | null>(null);
+
     // Example of using the ID
     displayId = computed(() => `Project ID: ${this.projectId()}`);
     constructor() {
 
     }
-      showError() {
+    showError() {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: this.errorMessage() });
     }
     ngOnInit() {
@@ -44,7 +47,7 @@ export class ProjectScreen implements OnInit {
     data: any;
     options: any;
     platformId = inject(PLATFORM_ID);
-    errorMessage=signal('');
+    errorMessage = signal('');
     initChart() {
         if (isPlatformBrowser(this.platformId)) {
             const documentStyle = getComputedStyle(document.documentElement);
@@ -61,9 +64,9 @@ export class ProjectScreen implements OnInit {
                         fill: true,
                         borderColor: documentStyle.getPropertyValue('--p-orange-500'),
                         tension: 0,
-                        pointRadius: 6,          
-                        pointHoverRadius: 8,    
-                        pointBorderWidth: 2,    
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        pointBorderWidth: 2,
                         pointBackgroundColor: documentStyle.getPropertyValue('--p-orange-500'),
                         pointBorderColor: '#fff'
                     },
@@ -103,18 +106,20 @@ export class ProjectScreen implements OnInit {
             this.cd.markForCheck();
         }
     }
-    getProjectById(){
-        this.commonService.getProjectById(3).subscribe({
-            next:(res)=>{
-                if(res){
-                    console.log(res,'d');
+    getProjectById() {
+        const id = Number(this.projectId());
+        this.commonService.getProjectById(id).subscribe({
+            next: (res) => {
+                if (res) {
+                    console.log(res, 'd');
+                    this.project.set(res);
                 }
-                
+
             },
-            error:(err)=>{
-                console.log(err.error.message); 
+            error: (err) => {
+                console.log(err.error.message);
                 this.errorMessage.set(err.error.message)
-                this.showError(); 
+                this.showError();
             }
         })
     }
