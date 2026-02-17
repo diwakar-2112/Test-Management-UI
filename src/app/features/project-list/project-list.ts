@@ -93,7 +93,7 @@ export class ProjectList implements OnInit {
     this.modalService.close();
   }
   openProject(id: number | string) {
-    this.commonService.getProjectById(3).subscribe({
+    this.commonService.getProjectById(id).subscribe({
       next: (res) => {
         if (res) {
           this.router.navigate(['/projects', id]);

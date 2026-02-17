@@ -21,6 +21,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/project-screen/project-screen').then(m => m.ProjectScreen)
       },
       {
+        path: 'projects/:projectId/test-suites',
+        loadComponent: () => import('./features/test-suite-list/test-suite-list').then(m => m.TestSuiteList)
+      },
+      {
         path: 'dashboard',
         redirectTo: 'projects',
         pathMatch: 'full'

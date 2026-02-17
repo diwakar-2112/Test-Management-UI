@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiService } from '../app/core/services/api.service';
 import { Observable, tap } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
 export interface LoginResponse {
     accessToken: string;
     tokenType: string;
@@ -17,7 +18,7 @@ export class CommonService {
     getAllProjects(page: number = 0, size: number = 10): Observable<any> {
         return this.api.regularGetRequest<any>('projects', { page, size });
     }
-    getProjectById(id:any){
+    getProjectById(id: any) {
         return this.api.regularGetRequest<any>(`projects/${id}`);
     }
 
@@ -41,12 +42,32 @@ export class CommonService {
             })
         )
     }
-    createProject(body:any):Observable<any>{
-        return this.api.post<any>('projects',body).pipe(
-            tap((response)=>{
-                if(response){
+    createProject(body: any): Observable<any> {
+        return this.api.post<any>('projects', body).pipe(
+            tap((response) => {
+                if (response) {
                     console.log("project created successfully");
-                    
+
+                }
+            })
+        )
+    }
+    getTestSuites(projectId: any, body: any) {
+        let url = `projects/${projectId}/testsuites`;
+        let params = new HttpParams();
+
+        if (body.page !== undefined) {
+            params = params.set('page', body.page);
+        }
+
+        if (body.size !== undefined) {
+            params = params.set('size', body.size);
+        }
+
+        return this.api.regularGetRequest<any>(url, { params }).pipe(
+            tap((res) => {
+                if (res) {
+                    console.log("test suites fetched successfully");
                 }
             })
         )
