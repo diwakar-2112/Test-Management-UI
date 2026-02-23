@@ -1,11 +1,17 @@
-import { Component, ChangeDetectionStrategy, inject, input, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { CommonService } from '../../../services/commonService';
+import { PageInfo, TestSuite, TestSuiteListResponse } from '../../core/model/model';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { ExcelExportService } from '../../core/services/excel-export.service';
+import { switchMap, tap } from 'rxjs';
 
 @Component({
     selector: 'app-test-suite-list',
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, ToastModule],
+    providers: [MessageService],
     templateUrl: './test-suite-list.html',
     styleUrl: './test-suite-list.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -13,30 +19,195 @@ import { CommonService } from '../../../services/commonService';
 export class TestSuiteList implements OnInit {
     private router = inject(Router);
     private commonService = inject(CommonService);
+    private messageService = inject(MessageService);
+    private excelExportService = inject(ExcelExportService);
 
     projectId = input.required<string>();
 
+    testSuites = signal<TestSuite[]>([]);
+    testSuitesExportData = signal<TestSuite[]>([]);
+    pageInfo = signal<PageInfo | null>(null);
+    loading = signal(false);
+    exporting = signal(false);
+    errorMessage = signal('');
+
+    currentPage = signal(0);
+    pageSize = signal(5);
+
+    totalPages = computed(() => this.pageInfo()?.totalPages ?? 0);
+    totalElements = computed(() => this.pageInfo()?.totalElements ?? 0);
+
+    pages = computed(() => {
+        const total = this.totalPages();
+        const current = this.currentPage();
+        const pages: number[] = [];
+
+        if (total <= 7) {
+            for (let i = 0; i < total; i++) pages.push(i);
+            return pages;
+        }
+
+        // Always show first page
+        pages.push(0);
+
+        if (current > 2) pages.push(-1); // ellipsis
+
+        const start = Math.max(1, current - 1);
+        const end = Math.min(total - 2, current + 1);
+        for (let i = start; i <= end; i++) pages.push(i);
+
+        if (current < total - 3) pages.push(-1); // ellipsis
+
+        // Always show last page
+        pages.push(total - 1);
+
+        return pages;
+    });
+
     ngOnInit() {
-        console.log('Test Suite List for project:', this.projectId());
+        console.log('in');
+
         this.getTestSuites();
     }
 
-    getTestSuites() {
-        this.commonService.getTestSuites(this.projectId(), { page: 0, size: 10 }).subscribe({
-            next: (res) => {
+    getTestSuites(isAll = false) {
+        this.loading.set(true);
+        this.commonService.getTestSuites(this.projectId(), {
+            page: this.currentPage(),
+            size: this.pageSize(),
+            isAll: isAll
+        }).subscribe({
+            next: (res: any) => {
                 if (res) {
-                    console.log("test suites fetched successfully");
-                    console.log(res);
+                    if (isAll) {
+                        // Export-all response is a flat array
+                        this.testSuitesExportData.set(res);
+                        console.log('res', res, 'and', this.testSuitesExportData());
 
+
+                    } else {
+                        // Paginated response has content + pageInfo
+                        this.testSuites.set(res.content);
+                        this.pageInfo.set(res.pageInfo);
+                    }
                 }
+                this.loading.set(false);
             },
             error: (err) => {
-                console.log(err.error.message);
+                this.errorMessage.set(err.error?.message ?? 'Failed to fetch test suites');
+                this.showError();
+                this.loading.set(false);
             }
-        })
+        });
+    }
+
+    goToPage(page: number) {
+        if (page < 0 || page >= this.totalPages() || page === this.currentPage()) return;
+        this.currentPage.set(page);
+        this.getTestSuites();
+    }
+
+    showError() {
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: this.errorMessage(),
+        });
     }
 
     navigateBack() {
         this.router.navigate(['/projects', this.projectId()]);
+    }
+
+    // exportToExcel() {
+    //     this.exporting.set(true);
+    //     const columns = [
+    //         { header: 'ID', key: 'id', width: 8 },
+    //         { header: 'Suite Name', key: 'name', width: 35 },
+    //         { header: 'Project ID', key: 'projectId', width: 12 },
+    //         { header: 'Created At', key: 'createdAt', width: 22 },
+    //         { header: 'Updated At', key: 'updatedAt', width: 22 },
+    //     ];
+    //     this.getTestSuites(true);
+
+    //     const data = this.testSuitesExportData();
+    //     console.log(this.testSuitesExportData(), 'data', data);
+
+    //     this.excelExportService.exportToExcel(
+    //         data,
+    //         columns,
+    //         `test-suites-project-${this.projectId()}`,
+    //         'Test Suites'
+    //     ).subscribe({
+    //         next: () => {
+    //             this.messageService.add({
+    //                 severity: 'success',
+    //                 summary: 'Exported',
+    //                 detail: `${data.length} test suites exported successfully`,
+    //             });
+    //             this.exporting.set(false);
+    //         },
+    //         error: () => {
+    //             this.messageService.add({
+    //                 severity: 'error',
+    //                 summary: 'Export Failed',
+    //                 detail: 'Failed to export test suites to Excel',
+    //             });
+    //             this.exporting.set(false);
+    //         }
+    //     });
+    // }
+
+    exportToExcel(){
+        this.exporting.set(true);
+         const columns = [
+            { header: 'ID', key: 'id', },
+            { header: 'Suite Name', key: 'name', },
+            { header: 'Project ID', key: 'projectId', },
+            { header: 'Created At', key: 'createdAt', },
+            { header: 'Updated At', key: 'updatedAt', },
+        ];
+        this.commonService.getTestSuites(this.projectId(),{
+            page:0,
+            size:'',
+            isAll:true
+        }).pipe(
+            switchMap((res:TestSuite[])=>
+            this.excelExportService.exportToExcel(
+                res,
+                columns,
+                `test-suites-project-${this.projectId()}`,
+                'Test Suites'
+            ).pipe(
+                tap(()=>{
+                    this.messageService.add({
+                           severity: 'success',
+                        summary: 'Exported',
+                        detail: `${res.length} test suites exported successfully`,
+                    })
+                })
+            ))
+        ).subscribe({
+            complete:()=>this.exporting.set(false),
+            error:()=>this.exporting.set(false)
+        })
+
+    }
+
+    formatDate(dateStr: string): string {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+        });
+    }
+
+    formatTime(dateStr: string): string {
+        const date = new Date(dateStr);
+        return date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+        });
     }
 }

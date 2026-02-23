@@ -54,17 +54,7 @@ export class CommonService {
     }
     getTestSuites(projectId: any, body: any) {
         let url = `projects/${projectId}/testsuites`;
-        let params = new HttpParams();
-
-        if (body.page !== undefined) {
-            params = params.set('page', body.page);
-        }
-
-        if (body.size !== undefined) {
-            params = params.set('size', body.size);
-        }
-
-        return this.api.regularGetRequest<any>(url, { params }).pipe(
+        return this.api.regularGetRequest<any>(url, body).pipe(
             tap((res) => {
                 if (res) {
                     console.log("test suites fetched successfully");
