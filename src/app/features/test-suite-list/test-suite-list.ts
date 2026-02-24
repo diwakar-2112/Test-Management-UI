@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, computed, inject, input, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, input, OnInit, signal, TemplateRef, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { CommonService } from '../../../services/commonService';
@@ -6,12 +6,14 @@ import { PageInfo, TestSuite, TestSuiteListResponse } from '../../core/model/mod
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ExcelExportService } from '../../core/services/excel-export.service';
+import { ModalService } from '../../core/services/modal.service';
+import { DialogService } from 'primeng/dynamicdialog';
 import { switchMap, tap } from 'rxjs';
 
 @Component({
     selector: 'app-test-suite-list',
     imports: [CommonModule, RouterModule, ToastModule],
-    providers: [MessageService],
+    providers: [MessageService, DialogService],
     templateUrl: './test-suite-list.html',
     styleUrl: './test-suite-list.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +23,7 @@ export class TestSuiteList implements OnInit {
     private commonService = inject(CommonService);
     private messageService = inject(MessageService);
     private excelExportService = inject(ExcelExportService);
+    private modalService = inject(ModalService);
 
     projectId = input.required<string>();
 
@@ -30,6 +33,9 @@ export class TestSuiteList implements OnInit {
     loading = signal(false);
     exporting = signal(false);
     errorMessage = signal('');
+    suiteToDelete = signal<TestSuite | null>(null);
+
+    deleteConfirmModal = viewChild.required<TemplateRef<unknown>>('deleteConfirmModal');
 
     currentPage = signal(0);
     pageSize = signal(5);
@@ -158,38 +164,38 @@ export class TestSuiteList implements OnInit {
     //     });
     // }
 
-    exportToExcel(){
+    exportToExcel() {
         this.exporting.set(true);
-         const columns = [
+        const columns = [
             { header: 'ID', key: 'id', },
             { header: 'Suite Name', key: 'name', },
             { header: 'Project ID', key: 'projectId', },
             { header: 'Created At', key: 'createdAt', },
             { header: 'Updated At', key: 'updatedAt', },
         ];
-        this.commonService.getTestSuites(this.projectId(),{
-            page:0,
-            size:'',
-            isAll:true
+        this.commonService.getTestSuites(this.projectId(), {
+            page: 0,
+            size: '',
+            isAll: true
         }).pipe(
-            switchMap((res:TestSuite[])=>
-            this.excelExportService.exportToExcel(
-                res,
-                columns,
-                `test-suites-project-${this.projectId()}`,
-                'Test Suites'
-            ).pipe(
-                tap(()=>{
-                    this.messageService.add({
-                           severity: 'success',
-                        summary: 'Exported',
-                        detail: `${res.length} test suites exported successfully`,
+            switchMap((res: TestSuite[]) =>
+                this.excelExportService.exportToExcel(
+                    res,
+                    columns,
+                    `test-suites-project-${this.projectId()}`,
+                    'Test Suites'
+                ).pipe(
+                    tap(() => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Exported',
+                            detail: `${res.length} test suites exported successfully`,
+                        })
                     })
-                })
-            ))
+                ))
         ).subscribe({
-            complete:()=>this.exporting.set(false),
-            error:()=>this.exporting.set(false)
+            complete: () => this.exporting.set(false),
+            error: () => this.exporting.set(false)
         })
 
     }
@@ -209,5 +215,47 @@ export class TestSuiteList implements OnInit {
             hour: '2-digit',
             minute: '2-digit',
         });
+    }
+
+    confirmDelete(suite: TestSuite) {
+        this.suiteToDelete.set(suite);
+        this.modalService.open(this.deleteConfirmModal(), {
+            header: 'Confirm Deletion',
+            width: '420px',
+        });
+    }
+
+    cancelDelete() {
+        this.suiteToDelete.set(null);
+        this.modalService.close();
+    }
+
+    onDeleteConfirmed() {
+        const suite = this.suiteToDelete();
+        if (!suite) return;
+
+        // TODO: Add delete API call here
+        console.log('Delete confirmed for suite:', suite.id, suite.name);
+        this.commonService.deleteTestSuiteById(this.projectId(), suite.id).subscribe({
+            next: (res: any) => {
+                if (res) {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Deleted',
+                        detail: `${suite.name} deleted successfully`,
+                    });
+                    this.getTestSuites();
+                }
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: err.error?.message ?? 'Failed to delete test suite',
+                });
+            }
+        })
+        this.suiteToDelete.set(null);
+        this.modalService.close();
     }
 }

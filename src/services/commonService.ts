@@ -62,5 +62,15 @@ export class CommonService {
             })
         )
     }
+    deleteTestSuiteById(projectId: any, testSuiteId: any) {
+        let url = `projects/${projectId}/testsuites/${testSuiteId}`;
+        return this.api.delete<any>(url).pipe(
+            tap((res) => {
+                if (res) {
+                    console.log("test suite deleted successfully");
+                }
+            })
+        )
+    }
 
 }
