@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiService } from '../app/core/services/api.service';
-import { Observable, tap } from 'rxjs';
-import { HttpParams } from '@angular/common/http';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 export interface LoginResponse {
     accessToken: string;
     tokenType: string;
@@ -69,6 +68,20 @@ export class CommonService {
                 if (res) {
                     console.log("test suite deleted successfully");
                 }
+            })
+        )
+    }
+    createTestSuite(projectId: string, body: any) {
+        let url = `projects/${projectId}/testsuites`;
+        return this.api.post<any>(url, body).pipe(
+            tap((res) => {
+                if (res) {
+                    console.log("test suite created successfully");
+                }
+            }),
+            catchError((err) => {
+                console.log(err);
+                return throwError(() => err);
             })
         )
     }

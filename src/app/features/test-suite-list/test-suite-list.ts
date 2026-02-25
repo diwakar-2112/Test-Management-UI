@@ -8,11 +8,12 @@ import { MessageService } from 'primeng/api';
 import { ExcelExportService } from '../../core/services/excel-export.service';
 import { ModalService } from '../../core/services/modal.service';
 import { DialogService } from 'primeng/dynamicdialog';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { switchMap, tap } from 'rxjs';
 
 @Component({
     selector: 'app-test-suite-list',
-    imports: [CommonModule, RouterModule, ToastModule],
+    imports: [CommonModule, RouterModule, ToastModule, ReactiveFormsModule],
     providers: [MessageService, DialogService],
     templateUrl: './test-suite-list.html',
     styleUrl: './test-suite-list.css',
@@ -24,6 +25,7 @@ export class TestSuiteList implements OnInit {
     private messageService = inject(MessageService);
     private excelExportService = inject(ExcelExportService);
     private modalService = inject(ModalService);
+    private fb = inject(FormBuilder);
 
     projectId = input.required<string>();
 
@@ -36,6 +38,11 @@ export class TestSuiteList implements OnInit {
     suiteToDelete = signal<TestSuite | null>(null);
 
     deleteConfirmModal = viewChild.required<TemplateRef<unknown>>('deleteConfirmModal');
+    createSuiteModal = viewChild.required<TemplateRef<unknown>>('createSuiteModal');
+
+    createSuiteForm = this.fb.group({
+        name: ['', Validators.required],
+    });
 
     currentPage = signal(0);
     pageSize = signal(5);
@@ -125,48 +132,10 @@ export class TestSuiteList implements OnInit {
         this.router.navigate(['/projects', this.projectId()]);
     }
 
-    // exportToExcel() {
-    //     this.exporting.set(true);
-    //     const columns = [
-    //         { header: 'ID', key: 'id', width: 8 },
-    //         { header: 'Suite Name', key: 'name', width: 35 },
-    //         { header: 'Project ID', key: 'projectId', width: 12 },
-    //         { header: 'Created At', key: 'createdAt', width: 22 },
-    //         { header: 'Updated At', key: 'updatedAt', width: 22 },
-    //     ];
-    //     this.getTestSuites(true);
-
-    //     const data = this.testSuitesExportData();
-    //     console.log(this.testSuitesExportData(), 'data', data);
-
-    //     this.excelExportService.exportToExcel(
-    //         data,
-    //         columns,
-    //         `test-suites-project-${this.projectId()}`,
-    //         'Test Suites'
-    //     ).subscribe({
-    //         next: () => {
-    //             this.messageService.add({
-    //                 severity: 'success',
-    //                 summary: 'Exported',
-    //                 detail: `${data.length} test suites exported successfully`,
-    //             });
-    //             this.exporting.set(false);
-    //         },
-    //         error: () => {
-    //             this.messageService.add({
-    //                 severity: 'error',
-    //                 summary: 'Export Failed',
-    //                 detail: 'Failed to export test suites to Excel',
-    //             });
-    //             this.exporting.set(false);
-    //         }
-    //     });
-    // }
-
     exportToExcel() {
         this.exporting.set(true);
         const columns = [
+            { header: 'S.No', key: 'sno', },
             { header: 'ID', key: 'id', },
             { header: 'Suite Name', key: 'name', },
             { header: 'Project ID', key: 'projectId', },
@@ -233,9 +202,6 @@ export class TestSuiteList implements OnInit {
     onDeleteConfirmed() {
         const suite = this.suiteToDelete();
         if (!suite) return;
-
-        // TODO: Add delete API call here
-        console.log('Delete confirmed for suite:', suite.id, suite.name);
         this.commonService.deleteTestSuiteById(this.projectId(), suite.id).subscribe({
             next: (res: any) => {
                 if (res) {
@@ -256,6 +222,47 @@ export class TestSuiteList implements OnInit {
             }
         })
         this.suiteToDelete.set(null);
+        this.modalService.close();
+    }
+
+    openCreateModal() {
+        this.createSuiteForm.reset();
+        this.modalService.open(this.createSuiteModal(), {
+            header: 'Create Test Suite',
+            width: '450px',
+        });
+    }
+
+    cancelCreate() {
+        this.modalService.close();
+    }
+
+    onCreateSuite() {
+        if (this.createSuiteForm.invalid) return;
+        let body = {
+            name: this.createSuiteForm.get('name')?.value
+        }
+
+        this.commonService.createTestSuite(this.projectId(), body).subscribe({
+            next: (res: any) => {
+                if (res) {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Created',
+                        detail: `Test suite '${body.name}' created successfully`,
+                    });
+                    this.getTestSuites();
+                }
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: err.error?.message ?? 'Failed to create test suite',
+                });
+            }
+        })
+
         this.modalService.close();
     }
 }
