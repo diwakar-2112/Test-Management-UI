@@ -30,3 +30,17 @@ export interface TestSuiteListResponse {
   content: TestSuite[];
   pageInfo: PageInfo;
 }
+
+export interface TestCase {
+  id: number;
+  title: string;
+  description: string;
+  steps: string;
+  expectedResult: string;
+  testSuitId: number;
+}
+
+export interface TestCaseListResponse {
+  content: TestCase[];
+  pageInfo: PageInfo;
+}

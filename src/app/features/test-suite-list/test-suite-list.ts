@@ -132,6 +132,10 @@ export class TestSuiteList implements OnInit {
         this.router.navigate(['/projects', this.projectId()]);
     }
 
+    navigateToTestCases(suite: TestSuite) {
+        this.router.navigate(['/projects', this.projectId(), 'test-suites', suite.id, 'test-cases']);
+    }
+
     exportToExcel() {
         this.exporting.set(true);
         const columns = [

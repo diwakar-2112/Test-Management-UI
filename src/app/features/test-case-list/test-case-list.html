@@ -1,0 +1,283 @@
+<div class="animate-fade-in">
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm mb-8">
+        <a routerLink="/projects"
+            class="text-text-secondary hover:text-primary font-medium transition-colors duration-200 flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 7h7v10H3zM14 7h7v6h-7zM14 15h7v2a2 2 0 0 1-2 2h-5z" />
+            </svg>
+            Projects
+        </a>
+        <svg class="w-3.5 h-3.5 text-text-secondary/50" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        <a (click)="navigateToProject()"
+            class="text-text-secondary hover:text-primary font-medium transition-colors duration-200 cursor-pointer">
+            Project
+        </a>
+        <svg class="w-3.5 h-3.5 text-text-secondary/50" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        <a (click)="navigateBack()"
+            class="text-text-secondary hover:text-primary font-medium transition-colors duration-200 cursor-pointer">
+            Test Suites
+        </a>
+        <svg class="w-3.5 h-3.5 text-text-secondary/50" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        <span class="text-text-main font-bold">Test Cases</span>
+    </nav>
+
+    <!-- Header -->
+    <section
+        class="relative bg-surface/90 border border-border rounded-3xl p-8 shadow-xl shadow-black/5 overflow-hidden mb-8">
+        <div
+            class="absolute top-0 right-0 w-64 h-64 bg-violet-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none">
+        </div>
+        <div class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <div class="flex items-center gap-4">
+                <div
+                    class="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500/15 to-surface border border-violet-500/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-7 h-7 text-violet-500" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-text-main tracking-tight">Test Cases</h1>
+                    <p class="text-text-secondary text-sm mt-0.5">
+                        {{ totalElements() }} case{{ totalElements() !== 1 ? 's' : '' }} in this suite
+                        <span class="text-text-secondary/50 mx-1">•</span>
+                        <span class="text-violet-500 font-semibold">Suite #{{ suiteId() }}</span>
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button (click)="navigateBack()"
+                    class="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main transition-all active:scale-95">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Back to Suites
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Bar -->
+    <div class="flex items-center gap-3 mb-6">
+        <div class="relative flex-1 max-w-md">
+            <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary/50 pointer-events-none"
+                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input type="text" placeholder="Search test cases by title..." [ngModel]="searchQuery()"
+                (ngModelChange)="onSearch($event)"
+                class="w-full pl-11 pr-4 py-3 rounded-xl bg-surface/90 border border-border text-sm text-text-main placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-500/50 transition-all" />
+        </div>
+    </div>
+
+    <!-- Section Header -->
+    <div class="flex items-center justify-between px-1 mb-4">
+        <div class="flex items-center gap-2.5">
+            <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+            </svg>
+            <span class="text-sm font-bold text-text-main">Contains {{ filteredTestCases().length }} test
+                case{{ filteredTestCases().length !== 1 ? 's' : '' }}</span>
+            <span
+                class="text-[10px] font-medium text-text-secondary/60 bg-surface px-2 py-0.5 rounded-full border border-border/50">Drag
+                to reorder</span>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (loading()) {
+    <section class="space-y-3">
+        @for (i of [1, 2, 3]; track i) {
+        <div class="bg-surface/90 border border-border rounded-2xl p-5 animate-pulse">
+            <div class="flex items-center gap-4">
+                <div class="w-5 h-8 bg-surface-highlight rounded"></div>
+                <div class="flex-1 space-y-2">
+                    <div class="h-5 w-64 bg-surface-highlight rounded-lg"></div>
+                    <div class="flex gap-8">
+                        <div class="h-3 w-28 bg-surface-highlight rounded"></div>
+                        <div class="h-3 w-28 bg-surface-highlight rounded"></div>
+                    </div>
+                </div>
+                <div class="w-8 h-8 bg-surface-highlight rounded-lg"></div>
+            </div>
+        </div>
+        }
+    </section>
+    }
+
+    <!-- Test Case Cards (Draggable) -->
+    @if (!loading() && filteredTestCases().length > 0) {
+    <div cdkDropList [cdkDropListData]="filteredTestCases()" (cdkDropListDropped)="onDrop($event)" class="space-y-3">
+
+        @for (tc of filteredTestCases(); track tc.id; let idx = $index) {
+        <div cdkDrag
+            class="group bg-surface/90 border border-border rounded-2xl shadow-sm shadow-black/[0.02] hover:shadow-md hover:shadow-black/[0.04] transition-all duration-200 overflow-hidden">
+
+            <!-- Drag Placeholder -->
+            <div *cdkDragPlaceholder
+                class="bg-violet-500/5 border-2 border-dashed border-violet-500/30 rounded-2xl h-20">
+            </div>
+
+            <!-- Card Header (always visible) -->
+            <div class="flex items-center gap-3 px-5 py-4">
+
+                <!-- Drag Handle -->
+                <div cdkDragHandle
+                    class="flex-shrink-0 cursor-grab active:cursor-grabbing p-1.5 rounded-lg text-text-secondary/30 hover:text-violet-500 hover:bg-violet-500/10 transition-all">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="9" cy="5" r="1.5" />
+                        <circle cx="15" cy="5" r="1.5" />
+                        <circle cx="9" cy="12" r="1.5" />
+                        <circle cx="15" cy="12" r="1.5" />
+                        <circle cx="9" cy="19" r="1.5" />
+                        <circle cx="15" cy="19" r="1.5" />
+                    </svg>
+                </div>
+
+                <!-- Left accent bar -->
+                <div class="w-1 self-stretch rounded-full bg-violet-500/40 flex-shrink-0"></div>
+
+                <!-- Title & Meta -->
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold text-violet-500 truncate">
+                        TC{{ tc.id }} - {{ tc.title }}
+                    </p>
+                    <div class="flex items-center gap-6 mt-1.5">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-[10px] font-medium text-text-secondary/60 uppercase tracking-wider">Suite
+                                ID:</span>
+                            <span class="text-xs font-semibold text-text-main">{{ tc.testSuitId }}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-[10px] font-medium text-text-secondary/60 uppercase tracking-wider">Test
+                                run stats:</span>
+                            <span
+                                class="text-xs font-semibold text-violet-500 cursor-pointer hover:underline">View</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kebab Menu -->
+                <button
+                    class="flex-shrink-0 p-2 rounded-lg text-text-secondary/50 hover:text-text-main hover:bg-surface-highlight transition-all">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="5" r="2" />
+                        <circle cx="12" cy="12" r="2" />
+                        <circle cx="12" cy="19" r="2" />
+                    </svg>
+                </button>
+
+                <!-- Expand/Collapse Toggle -->
+                <button (click)="toggleExpand(tc.id)"
+                    class="flex-shrink-0 p-2 rounded-lg text-text-secondary/50 hover:text-violet-500 hover:bg-violet-500/10 transition-all">
+                    <svg class="w-4 h-4 transition-transform duration-300" [class.rotate-180]="isExpanded(tc.id)"
+                        fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Expandable Content -->
+            @if (isExpanded(tc.id)) {
+            <div class="px-5 pb-5 pt-0 ml-[52px] border-t border-border/50 animate-fade-in">
+
+                <!-- Description -->
+                <div class="mt-4">
+                    <h4 class="text-[10px] font-bold text-text-secondary/60 uppercase tracking-wider mb-1.5">
+                        Description</h4>
+                    <p class="text-sm text-text-main leading-relaxed">{{ tc.description }}</p>
+                </div>
+
+                <!-- Test Steps -->
+                <div class="mt-4">
+                    <h4 class="text-[10px] font-bold text-text-secondary/60 uppercase tracking-wider mb-1.5">Test
+                        Steps</h4>
+                    <div class="space-y-1">
+                        @for (step of tc.steps.split('\n'); track $index) {
+                        <p class="text-sm text-text-main leading-relaxed">{{ step }}</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Expected Result -->
+                <div class="mt-4">
+                    <h4 class="text-[10px] font-bold text-text-secondary/60 uppercase tracking-wider mb-1.5">Expected
+                        Result</h4>
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/15">
+                        <svg class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor"
+                            stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="text-xs font-medium text-emerald-600">{{ tc.expectedResult }}</span>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Empty State -->
+    @if (!loading() && filteredTestCases().length === 0 && testCases().length > 0) {
+    <section class="bg-surface/90 border border-border rounded-3xl shadow-xl shadow-black/5 overflow-hidden">
+        <div class="flex flex-col items-center justify-center py-16 text-center">
+            <div
+                class="w-20 h-20 bg-background rounded-full flex items-center justify-center mb-5 shadow-xl shadow-black/5 border border-border">
+                <svg class="w-9 h-9 text-text-secondary/40" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-text-main mb-1">No matches found</h3>
+            <p class="text-text-secondary text-sm max-w-xs">
+                No test cases match your search. Try a different keyword.
+            </p>
+        </div>
+    </section>
+    }
+
+    @if (!loading() && testCases().length === 0) {
+    <section class="bg-surface/90 border border-border rounded-3xl shadow-xl shadow-black/5 overflow-hidden">
+        <div class="flex flex-col items-center justify-center py-20 text-center">
+            <div
+                class="w-24 h-24 bg-background rounded-full flex items-center justify-center mb-6 shadow-xl shadow-black/5 border border-border">
+                <svg class="w-10 h-10 text-text-secondary/40" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-text-main mb-2">No Test Cases Yet</h3>
+            <p class="text-text-secondary max-w-sm mb-8">
+                This test suite doesn't have any test cases yet. Create your first test case to get started.
+            </p>
+            <button
+                class="inline-flex items-center gap-2 rounded-xl bg-violet-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-500/30 transition-all hover:bg-violet-600 hover:shadow-violet-500/40 hover:-translate-y-1 active:scale-95">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path d="M12 4v16m8-8H4" />
+                </svg>
+                New Test Case
+            </button>
+        </div>
+    </section>
+    }
+</div>

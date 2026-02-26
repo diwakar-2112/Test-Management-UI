@@ -85,5 +85,15 @@ export class CommonService {
             })
         )
     }
+    getTestCases(projectId: string, testSuiteId: string, body: any) {
+        let url = `testsuites/${testSuiteId}/testcase`;
+        return this.api.regularGetRequest<any>(url, body).pipe(
+            tap((res) => {
+                if (res) {
+                    console.log("test cases fetched successfully");
+                }
+            })
+        )
+    }
 
 }
