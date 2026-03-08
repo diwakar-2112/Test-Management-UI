@@ -50,8 +50,7 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
-              "buildOptimizer": true
+              "aot": true
             },
             "development": {
               "optimization": false,
