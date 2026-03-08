@@ -10,10 +10,10 @@ import { ModalService } from '../../core/services/modal.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { switchMap, tap } from 'rxjs';
-
+import { InputTextModule } from 'primeng/inputtext';
 @Component({
     selector: 'app-test-suite-list',
-    imports: [CommonModule, RouterModule, ToastModule, ReactiveFormsModule],
+    imports: [CommonModule, RouterModule, InputTextModule, ToastModule, ReactiveFormsModule],
     providers: [MessageService, DialogService],
     templateUrl: './test-suite-list.html',
     styleUrl: './test-suite-list.css',
@@ -231,9 +231,19 @@ export class TestSuiteList implements OnInit {
 
     openCreateModal() {
         this.createSuiteForm.reset();
+        // this.modalService.open(this.createSuiteModal(), {
+        //     header: 'Create Test Suite',
+        //     width: '450px',
+        // });
+
         this.modalService.open(this.createSuiteModal(), {
             header: 'Create Test Suite',
             width: '450px',
+        }).onClose.subscribe((result) => {
+            if (result) {
+                console.log('Got result', result);
+            }
+            // this.projectForm.reset();
         });
     }
 

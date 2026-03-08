@@ -5,12 +5,16 @@ import { FormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { TestCase, PageInfo } from '../../core/model/model';
 import { CommonService } from '../../../services/commonService';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+
 
 @Component({
     selector: 'app-test-case-list',
-    imports: [CommonModule, RouterModule, FormsModule, DragDropModule],
+    imports: [CommonModule, RouterModule, FormsModule, DragDropModule, ToastModule],
     templateUrl: './test-case-list.html',
     styleUrl: './test-case-list.css',
+    providers: [MessageService],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestCaseList implements OnInit {
@@ -18,14 +22,19 @@ export class TestCaseList implements OnInit {
     private commonService = inject(CommonService);
     projectId = input.required<string>();
     suiteId = input.required<string>();
+    private messageService = inject(MessageService);
 
     loading = signal(false);
     searchQuery = signal('');
     expandedIds = signal<Set<number>>(new Set());
-
+    openMenuId = signal<number | null>(null);
+    errorMessage = signal('');
 
     ngOnInit(): void {
         this.getTestCases();
+    }
+    showError() {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: this.errorMessage(), sticky: false });
     }
 
     // Dummy data
@@ -61,6 +70,36 @@ export class TestCaseList implements OnInit {
         });
     }
 
+    toggleMenu(id: number) {
+        this.openMenuId.update(current => current === id ? null : id);
+    }
+
+    closeMenu() {
+        this.openMenuId.set(null);
+    }
+    editMenu(id: number) {
+        this.openMenuId.set(null);
+    }
+    deleteMenu(id: any) {
+        console.log(id, 'delte');
+        this.commonService.deleteTestCaseById(id).subscribe({
+            next: (res) => {
+                console.log(res);
+                this.getTestCases();
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Deleted',
+                    detail: `Deleted Successfully`,
+                })
+            },
+            error: (err) => {
+                console.log(err);
+                this.errorMessage.set(err.error.message)
+                this.showError();
+            }
+        })
+        this.openMenuId.set(null);
+    }
     isExpanded(id: number): boolean {
         return this.expandedIds().has(id);
     }

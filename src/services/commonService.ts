@@ -95,5 +95,15 @@ export class CommonService {
             })
         )
     }
+    deleteTestCaseById(testCaseId: string) {
+        let url = `testcases/${testCaseId}`;
+        return this.api.delete<any>(url).pipe(
+            tap((res) => {
+                if (res) {
+                    console.log("test case deleted successfully");
+                }
+            })
+        )
+    }
 
 }

@@ -71,6 +71,8 @@
     </section>
 
     <!-- Search Bar -->
+    @if(testCases().length > 0){
+
     <div class="flex items-center gap-3 mb-6">
         <div class="relative flex-1 max-w-md">
             <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary/50 pointer-events-none"
@@ -83,6 +85,7 @@
                 class="w-full pl-11 pr-4 py-3 rounded-xl bg-surface/90 border border-border text-sm text-text-main placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-500/50 transition-all" />
         </div>
     </div>
+    }
 
     <!-- Section Header -->
     <div class="flex items-center justify-between px-1 mb-4">
@@ -126,7 +129,7 @@
 
         @for (tc of filteredTestCases(); track tc.id; let idx = $index) {
         <div cdkDrag
-            class="group bg-surface/90 border border-border rounded-2xl shadow-sm shadow-black/[0.02] hover:shadow-md hover:shadow-black/[0.04] transition-all duration-200 overflow-hidden">
+            class="group bg-surface/90 border border-border rounded-2xl shadow-sm shadow-black/[0.02] hover:shadow-md hover:shadow-black/[0.04] transition-all duration-200">
 
             <!-- Drag Placeholder -->
             <div *cdkDragPlaceholder
@@ -173,14 +176,43 @@
                 </div>
 
                 <!-- Kebab Menu -->
-                <button
-                    class="flex-shrink-0 p-2 rounded-lg text-text-secondary/50 hover:text-text-main hover:bg-surface-highlight transition-all">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                        <circle cx="12" cy="5" r="2" />
-                        <circle cx="12" cy="12" r="2" />
-                        <circle cx="12" cy="19" r="2" />
-                    </svg>
-                </button>
+                <div class="relative flex-shrink-0">
+                    <button (click)="toggleMenu(tc.id)"
+                        class="p-2 rounded-lg text-text-secondary/50 hover:text-text-main hover:bg-surface-highlight transition-all">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="5" r="2" />
+                            <circle cx="12" cy="12" r="2" />
+                            <circle cx="12" cy="19" r="2" />
+                        </svg>
+                    </button>
+
+                    @if (openMenuId() === tc.id) {
+                    <!-- Backdrop to close menu on outside click -->
+                    <div class="fixed inset-0 z-40" (click)="closeMenu()"></div>
+
+                    <!-- Dropdown -->
+                    <div
+                        class="absolute right-0 top-full mt-1 z-50 w-40 bg-surface border border-border rounded-xl shadow-xl shadow-black/10 overflow-hidden animate-fade-in">
+                        <button (click)="editMenu(tc.id)"
+                            class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-text-main hover:bg-violet-500/10 hover:text-violet-500 transition-all">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                            </svg>
+                            Edit
+                        </button>
+                        <div class="border-t border-border/50"></div>
+                        <button (click)="deleteMenu(tc.id)"
+                            class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-500/10 transition-all">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                            Delete
+                        </button>
+                    </div>
+                    }
+                </div>
 
                 <!-- Expand/Collapse Toggle -->
                 <button (click)="toggleExpand(tc.id)"
@@ -257,7 +289,7 @@
 
     @if (!loading() && testCases().length === 0) {
     <section class="bg-surface/90 border border-border rounded-3xl shadow-xl shadow-black/5 overflow-hidden">
-        <div class="flex flex-col items-center justify-center py-20 text-center">
+        <div class="flex flex-col items-center justify-center py-5 text-center">
             <div
                 class="w-24 h-24 bg-background rounded-full flex items-center justify-center mb-6 shadow-xl shadow-black/5 border border-border">
                 <svg class="w-10 h-10 text-text-secondary/40" fill="none" stroke="currentColor" stroke-width="1.5"
@@ -280,4 +312,8 @@
         </div>
     </section>
     }
+</div>
+
+<div class="card flex justify-center gap-2">
+    <p-toast styleClass="center-toast" />
 </div>
