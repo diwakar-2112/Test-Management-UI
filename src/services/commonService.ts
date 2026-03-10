@@ -95,13 +95,41 @@ export class CommonService {
             })
         )
     }
-    deleteTestCaseById(testCaseId: string) {
+    deleteTestCaseById(testCaseId: number) {
         let url = `testcases/${testCaseId}`;
         return this.api.delete<any>(url).pipe(
             tap((res) => {
                 if (res) {
                     console.log("test case deleted successfully");
                 }
+            })
+        )
+    }
+    createTestCase(testSuiteId: string, body: object) {
+        let url = `testsuites/${testSuiteId}/testcase`;
+        return this.api.post<any>(url, body).pipe(
+            tap((res) => {
+                if (res) {
+                    console.log("test case created successfully");
+                }
+            }),
+            catchError((err) => {
+                console.log(err);
+                return throwError(() => err);
+            })
+        )
+    }
+    updateTestCase(testCaseId:number,body:object){
+        let url = `testcases/${testCaseId}`;
+        return this.api.put<any>(url,body).pipe(
+            tap((res)=>{
+                if(res){
+                    console.log('case updated');
+                    
+                }
+            }),
+            catchError((err)=>{
+                return throwError(()=>err)
             })
         )
     }
