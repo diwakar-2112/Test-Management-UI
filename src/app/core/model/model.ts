@@ -44,3 +44,33 @@ export interface TestCaseListResponse {
   content: TestCase[];
   pageInfo: PageInfo;
 }
+
+export interface Assignee {
+  id: number;
+  username: string;
+}
+
+export interface TestResult {
+  id: number;
+  status: string;
+  comments: string | null;
+  title: string;
+  description: string;
+  steps: string;
+  expectedResult: string;
+}
+
+export interface TestRun {
+  id: number;
+  name: string;
+  status: string;
+  createdAt: string;
+  projectId: number;
+  assignee: Assignee | null;
+  testResults: TestResult[];
+}
+
+export interface TestRunListResponse {
+  content: TestRun[];
+  pageInfo: PageInfo;
+}

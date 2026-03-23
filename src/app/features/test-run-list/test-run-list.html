@@ -1,0 +1,193 @@
+<div class="animate-fade-in">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm mb-8">
+        <a routerLink="/projects" class="text-text-secondary hover:text-primary font-medium transition-colors duration-200 flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h7v10H3zM14 7h7v6h-7zM14 15h7v2a2 2 0 0 1-2 2h-5z" />
+            </svg>
+            Projects
+        </a>
+        <svg class="w-3.5 h-3.5 text-text-secondary/50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        <span class="text-text-main font-bold">Test Runs</span>
+    </nav>
+
+    <!-- Header -->
+    <section class="relative bg-surface/90 border border-border rounded-3xl p-8 shadow-xl shadow-black/5 overflow-hidden mb-8">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+
+        <div class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <div class="flex items-center gap-4">
+                <div class="h-14 w-14 rounded-2xl bg-gradient-to-br from-blue-500/15 to-surface border border-blue-500/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0v-6m-4.5 0v6m15-4.5v3A2.25 2.25 0 0118 16.5h-2.25m-6 0h-2.25m-6 0H3A2.25 2.25 0 01.75 14.25v-3C.75 10.007 2.007 8.75 3.5 8.75h1.5m6 0h2.25m6 0h2.25A2.25 2.25 0 0120.25 11.25z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-text-main tracking-tight">Test Runs</h1>
+                    <p class="text-text-secondary text-sm mt-0.5">
+                        {{ totalElements() }} run{{ totalElements() !== 1 ? 's' : '' }} found
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button (click)="openCreateModal()" class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M12 4v16m8-8H4" />
+                    </svg>
+                    New Test Run
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="bg-surface/90 border border-border rounded-2xl shadow-sm mb-8 px-6 py-5">
+        <form [formGroup]="filterForm" class="flex flex-col md:flex-row gap-4 items-center w-full">
+            <div class="w-full md:w-1/3 flex items-center bg-background border border-border rounded-xl px-4 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all h-12">
+                <svg class="w-5 h-5 text-text-secondary mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+                <input formControlName="search" type="text" placeholder="Search test runs..." class="w-full bg-transparent text-sm font-medium text-text-main placeholder:text-text-secondary outline-none border-none py-1" />
+            </div>
+
+            <div class="w-full md:w-1/3 h-12">
+                <p-select formControlName="projectId" [options]="projects()" optionLabel="name" optionValue="id" placeholder="Select Project" [showClear]="true" styleClass="w-full h-full custom-select"></p-select>
+            </div>
+
+            <div class="w-full md:w-1/3 h-12">
+                <p-select formControlName="status" [options]="statusOptions" optionLabel="label" optionValue="value" placeholder="Select Status" [showClear]="true" styleClass="w-full h-full custom-select"></p-select>
+            </div>
+        </form>
+    </section>
+
+    <!-- Loading State -->
+    @if (loading()) {
+        <section class="space-y-4">
+            @for (i of [1, 2, 3, 4]; track i) {
+                <div class="bg-surface/90 border border-border rounded-2xl p-6 animate-pulse">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-surface-highlight"></div>
+                            <div class="space-y-2">
+                                <div class="h-5 w-48 bg-surface-highlight rounded-lg"></div>
+                                <div class="h-3 w-32 bg-surface-highlight rounded"></div>
+                            </div>
+                        </div>
+                        <div class="h-8 w-20 bg-surface-highlight rounded-lg"></div>
+                    </div>
+                </div>
+            }
+        </section>
+    }
+
+    <!-- Test Run List -->
+    @if (!loading() && testRuns().length > 0) {
+        <section class="bg-surface/90 border border-border rounded-3xl shadow-xl shadow-black/5 overflow-hidden">
+            <!-- Table Header -->
+            <div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-border bg-background/50 text-[11px] font-bold text-text-secondary uppercase tracking-widest hidden md:grid">
+                <div class="col-span-1">#</div>
+                <div class="col-span-4">Run Name</div>
+                <div class="col-span-2">Assigned To</div>
+                <div class="col-span-2">Status</div>
+                <div class="col-span-2">Created</div>
+                <div class="col-span-1 text-right">Actions</div>
+            </div>
+
+            <!-- List rows -->
+            @for (run of testRuns(); track run.id; let idx = $index) {
+                <div (click)="navigateToExecution(run)" class="group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 border-b border-border/50 last:border-b-0 hover:bg-blue-500/[0.03] transition-colors duration-200 cursor-pointer items-center">
+                    
+                    <div class="col-span-1 hidden md:block">
+                        <span class="text-xs font-bold text-text-secondary/50 bg-background px-2 py-1 rounded-lg border border-border/50">
+                            {{ (currentPage() * pageSize()) + idx + 1 }}
+                        </span>
+                    </div>
+
+                    <div class="col-span-4 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/10 to-surface border border-blue-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 12a1.5 1.5 0 01-1.5 1.5h-6A1.5 1.5 0 015.25 12v-1.5A1.5 1.5 0 016.75 9h6a1.5 1.5 0 011.5 1.5V12zM18.75 14.25h-6M18.75 9.75h-6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-text-main group-hover:text-blue-500 transition-colors">{{ run.name }}</p>
+                            <p class="text-[10px] text-text-secondary mt-0.5">Project ID: {{ run.projectId }}</p>
+                        </div>
+                    </div>
+
+                    <div class="col-span-2">
+                        @if (run.assignee) {
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold">
+                                    {{run.assignee.username.substring(0,2).toUpperCase()}}
+                                </div>
+                                <span class="text-xs font-medium text-text-main">{{ run.assignee.username }}</span>
+                            </div>
+                        } @else {
+                            <span class="text-xs text-text-secondary italic">Unassigned</span>
+                        }
+                    </div>
+
+                    <div class="col-span-2">
+                        <span class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border {{ getStatusClass(run.status) }}">
+                            {{ getStatusLabel(run.status) }}
+                        </span>
+                    </div>
+
+                    <div class="col-span-2">
+                        <p class="text-xs font-medium text-text-main">{{ formatDate(run.createdAt) }}</p>
+                        <p class="text-[10px] text-text-secondary mt-0.5">{{ formatTime(run.createdAt) }}</p>
+                    </div>
+
+                    <div class="col-span-1 flex justify-end gap-1">
+                        <button (click)="$event.stopPropagation(); navigateToExecution(run)" class="p-2 rounded-lg text-text-secondary hover:text-blue-500 hover:bg-blue-500/10 transition-all duration-200 active:scale-90">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <!-- Shared Pagination -->
+            <app-pagination
+                [currentPage]="currentPage()"
+                [totalPages]="totalPages()"
+                [totalElements]="totalElements()"
+                [pageSize]="pageSize()"
+                itemLabel="runs"
+                (pageChange)="onPageChange($event)">
+            </app-pagination>
+        </section>
+    }
+
+    <!-- Empty State -->
+    @if (!loading() && testRuns().length === 0) {
+        <section class="bg-surface/90 border border-border rounded-3xl shadow-xl shadow-black/5 overflow-hidden">
+            <div class="flex flex-col items-center justify-center py-20 text-center">
+                <div class="w-24 h-24 bg-background rounded-full flex items-center justify-center mb-6 shadow-xl shadow-black/5 border border-border">
+                    <svg class="w-10 h-10 text-text-secondary/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0v-6m-4.5 0v6m15-4.5v3A2.25 2.25 0 0118 16.5h-2.25m-6 0h-2.25m-6 0H3A2.25 2.25 0 01.75 14.25v-3C.75 10.007 2.007 8.75 3.5 8.75h1.5m6 0h2.25m6 0h2.25A2.25 2.25 0 0120.25 11.25z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-text-main mb-2">No Test Runs Found</h3>
+                <p class="text-text-secondary max-w-sm mb-8">
+                    We couldn't find any test runs matching your criteria, or you haven't created one yet.
+                </p>
+                <button (click)="openCreateModal()" class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-1 active:scale-95">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M12 4v16m8-8H4" />
+                    </svg>
+                    Create Test Run
+                </button>
+            </div>
+        </section>
+    }
+</div>
+
+<div class="card flex justify-center gap-2">
+    <p-toast styleClass="center-toast" />
+</div>

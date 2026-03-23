@@ -134,4 +134,13 @@ export class CommonService {
         )
     }
 
+    getAllTestRuns(params: any): Observable<any> {
+        return this.api.regularGetRequest<any>('testruns', params).pipe(
+            tap((res) => {
+                if (res) {
+                    console.log("global test runs fetched successfully");
+                }
+            })
+        );
+    }
 }

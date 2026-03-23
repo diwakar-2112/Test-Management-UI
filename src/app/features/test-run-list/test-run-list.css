@@ -1,0 +1,17 @@
+/* Add specific styles for dropdowns if primeNG needs overrides */
+:host ::ng-deep .custom-select .p-select {
+    height: 100%;
+    border-radius: 0.75rem; /* xl */
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+:host ::ng-deep .custom-select .p-select:focus, :host ::ng-deep .custom-select .p-select:focus-within {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+/* Base wrapper for dropdown border alignment */
+:host ::ng-deep .p-select-wrapper {
+    height: 100%;
+}
