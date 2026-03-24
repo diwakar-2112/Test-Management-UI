@@ -1,4 +1,4 @@
 export const enviorment = {
     production: true,
-    baseUrl: 'https://test-management-apis.onrender.com/api'
+    baseUrl: 'https://test-management-apis-production.up.railway.app'
 }
