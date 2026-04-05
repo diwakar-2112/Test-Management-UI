@@ -187,6 +187,8 @@ export class TestRunList implements OnInit {
         this.selectedRunForAssignee.set(run);
         this.isAssigneeFormSubmitted.set(false);
         this.addAssigneeForm.reset();
+        console.log(run);
+
         this.modalService.open(this.addAssigneeModal(), {
             header: 'Add Assignee',
             width: '30rem'
@@ -206,6 +208,11 @@ export class TestRunList implements OnInit {
         }
 
         console.log('Add assignee payload:', { testRunId: run.id, userName });
+        this.commonService.addAssignee(run?.id, userName).subscribe({
+            next: (res: any) => {
+                this.getTestRuns();
+            }
+        })
         this.messageService.add({
             severity: 'info',
             summary: 'Validation Passed',
@@ -225,8 +232,8 @@ export class TestRunList implements OnInit {
         this.commonService.getAssigneeLookup().subscribe({
             next: (res: User[]) => {
                 this.users = res;
-                console.log(this.users,'usrs');
-                
+                console.log(this.users, 'usrs');
+
             }
         })
     }

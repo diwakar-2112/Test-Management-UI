@@ -144,7 +144,7 @@ export class CommonService {
             })
         );
     }
-    addAssignee(testrunId: string, asigneeId: string) {
+    addAssignee(testrunId: number, asigneeId: string) {
         let url = `testruns/${testrunId}/assign?userId=${asigneeId}`
         return this.api.post<any>(url, '').pipe(
             tap((res) => {
