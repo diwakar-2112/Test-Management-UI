@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, OnInit, signal, TemplateRef, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonService } from '../../../services/commonService';
 import { PageInfo, TestRun, Project } from '../../core/model/model';
 import { ToastModule } from 'primeng/toast';
@@ -10,11 +10,19 @@ import { ModalService } from '../../core/services/modal.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { PaginationComponent } from '../../core/components/pagination/pagination.component';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { FormsModule } from '@angular/forms';
+import { User } from '../../core/model/model';
+interface City {
+    name: string;
+    code: string;
+}
+
 
 @Component({
     selector: 'app-test-run-list',
     standalone: true,
-    imports: [CommonModule, RouterModule, ReactiveFormsModule, ToastModule, InputTextModule, SelectModule, PaginationComponent],
+    imports: [CommonModule, RouterModule, ReactiveFormsModule, ToastModule, InputTextModule, SelectModule, PaginationComponent, FloatLabelModule, FormsModule],
     providers: [MessageService],
     templateUrl: './test-run-list.html',
     styleUrl: './test-run-list.css',
@@ -24,6 +32,7 @@ export class TestRunList implements OnInit {
     private router = inject(Router);
     private commonService = inject(CommonService);
     private messageService = inject(MessageService);
+    private modalService = inject(ModalService);
     private fb = inject(FormBuilder);
 
     testRuns = signal<TestRun[]>([]);
@@ -34,7 +43,14 @@ export class TestRunList implements OnInit {
 
     currentPage = signal(0);
     pageSize = signal(10);
+    isAssigneeFormSubmitted = signal(false);
+    selectedRunForAssignee = signal<TestRun | null>(null);
 
+    addAssigneeModal = viewChild.required<TemplateRef<unknown>>('addAssigneeModal');
+
+    cities: City[] | undefined;
+    selectedUser: City | undefined;
+    users: User[] | undefined;
     statusOptions = [
         { label: 'All Statuses', value: null },
         { label: 'Not Started', value: 'NOT_STARTED' },
@@ -48,16 +64,19 @@ export class TestRunList implements OnInit {
         status: [null as string | null]
     });
 
+    addAssigneeForm = this.fb.group({
+        userName: ['', [Validators.required]]
+    });
+
     totalPages = computed(() => this.pageInfo()?.totalPages ?? 0);
     totalElements = computed(() => this.pageInfo()?.totalElements ?? 0);
 
     ngOnInit() {
         this.loadProjects();
+        this.getAssigneeLookup();
         this.getTestRuns();
-
-        // Subscribe to filter changes to reload data
         this.filterForm.valueChanges.subscribe(() => {
-            this.currentPage.set(0); // reset page on filter change
+            this.currentPage.set(0);
             this.getTestRuns();
         });
     }
@@ -73,7 +92,6 @@ export class TestRunList implements OnInit {
     }
 
     getTestRuns() {
-
         this.loading.set(true);
         const filters = this.filterForm.value;
         const params: any = {
@@ -88,8 +106,6 @@ export class TestRunList implements OnInit {
         this.commonService.getAllTestRuns(params).subscribe({
             next: (res: any) => {
                 if (res) {
-                    console.log(res, 'is res of testruns');
-
                     this.testRuns.set(res.content || []);
                     this.pageInfo.set(res.pageInfo || null);
                 }
@@ -162,6 +178,56 @@ export class TestRunList implements OnInit {
     }
 
     navigateToExecution(run: TestRun) {
-        console.log('Navigate to run:', run);
+        event?.preventDefault();
+    }
+
+    assignUser(event: MouseEvent | KeyboardEvent, run: TestRun) {
+        event.stopPropagation();
+        event.preventDefault();
+        this.selectedRunForAssignee.set(run);
+        this.isAssigneeFormSubmitted.set(false);
+        this.addAssigneeForm.reset();
+        this.modalService.open(this.addAssigneeModal(), {
+            header: 'Add Assignee',
+            width: '30rem'
+        });
+    }
+
+    submitAssignee() {
+        this.isAssigneeFormSubmitted.set(true);
+        if (this.addAssigneeForm.invalid) {
+            return;
+        }
+
+        const run = this.selectedRunForAssignee();
+        const userName = this.addAssigneeForm.get('userName')?.value;
+        if (!run || !userName) {
+            return;
+        }
+
+        console.log('Add assignee payload:', { testRunId: run.id, userName });
+        this.messageService.add({
+            severity: 'info',
+            summary: 'Validation Passed',
+            detail: `Ready to assign user ${userName} to test run ${run.id}.`
+        });
+        this.closeAssigneeModal();
+    }
+
+    closeAssigneeModal() {
+        this.addAssigneeForm.reset();
+        this.isAssigneeFormSubmitted.set(false);
+        this.selectedRunForAssignee.set(null);
+        this.modalService.close();
+    }
+
+    getAssigneeLookup() {
+        this.commonService.getAssigneeLookup().subscribe({
+            next: (res: User[]) => {
+                this.users = res;
+                console.log(this.users,'usrs');
+                
+            }
+        })
     }
 }

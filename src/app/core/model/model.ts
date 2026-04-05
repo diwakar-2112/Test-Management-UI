@@ -74,3 +74,8 @@ export interface TestRunListResponse {
   content: TestRun[];
   pageInfo: PageInfo;
 }
+
+export interface User {
+  id: number;
+  username: string;
+}

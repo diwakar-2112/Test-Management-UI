@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiService } from '../app/core/services/api.service';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { User } from '../app/core/model/model';
 export interface LoginResponse {
     accessToken: string;
     tokenType: string;
@@ -119,17 +120,17 @@ export class CommonService {
             })
         )
     }
-    updateTestCase(testCaseId:number,body:object){
+    updateTestCase(testCaseId: number, body: object) {
         let url = `testcases/${testCaseId}`;
-        return this.api.put<any>(url,body).pipe(
-            tap((res)=>{
-                if(res){
+        return this.api.put<any>(url, body).pipe(
+            tap((res) => {
+                if (res) {
                     console.log('case updated');
-                    
+
                 }
             }),
-            catchError((err)=>{
-                return throwError(()=>err)
+            catchError((err) => {
+                return throwError(() => err)
             })
         )
     }
@@ -142,5 +143,28 @@ export class CommonService {
                 }
             })
         );
+    }
+    addAssignee(testrunId: string, asigneeId: string) {
+        let url = `testruns/${testrunId}/assign?userId=${asigneeId}`
+        return this.api.post<any>(url, '').pipe(
+            tap((res) => {
+                console.log('assigned successfully');
+
+            }),
+            catchError((err) => {
+                return throwError(() => err)
+            })
+        )
+    }
+    getAssigneeLookup() {
+        let url = `users/lookup`;
+        return this.api.regularGetRequest<User[]>(url).pipe(
+            tap((res) => {
+                console.log('fetched users list');
+            }),
+            catchError((err) => {
+                return throwError(() => err)
+            })
+        )
     }
 }
