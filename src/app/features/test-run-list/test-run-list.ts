@@ -13,6 +13,8 @@ import { PaginationComponent } from '../../core/components/pagination/pagination
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../core/model/model';
+import { GlobalLoaderService } from '../../core/services/global-loader.service';
+
 interface City {
     name: string;
     code: string;
@@ -29,6 +31,7 @@ interface City {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestRunList implements OnInit {
+    private globalLoader = inject(GlobalLoaderService);
     private router = inject(Router);
     private commonService = inject(CommonService);
     private messageService = inject(MessageService);
@@ -194,6 +197,14 @@ export class TestRunList implements OnInit {
             width: '30rem'
         });
     }
+    testLoader() {
+  const handle = this.globalLoader.show('Testing global loader...');
+
+  setTimeout(() => {
+    handle.close();
+  }, 20000);
+}
+
 
     submitAssignee() {
         this.isAssigneeFormSubmitted.set(true);
@@ -208,17 +219,21 @@ export class TestRunList implements OnInit {
         }
 
         console.log('Add assignee payload:', { testRunId: run.id, userName });
-        this.commonService.addAssignee(run?.id, userName).subscribe({
+        this.commonService.addAssignee(run.id, userName).subscribe({
             next: (res: any) => {
                 this.getTestRuns();
+                this.closeAssigneeModal();
+                this.messageService.add({
+                    severity: 'success',
+                    summary: `Test Run Assigned to user ${res?.assignee?.username}`,
+                    // detail: `Ready to assign user ${res?.assignee?.userName} to test run ${run.id}.`
+                });
+            },
+            error: (err) => {
+                this.errorMessage.set(err.error?.message ?? 'Failed to assign test run');
+                this.showError();
             }
-        })
-        this.messageService.add({
-            severity: 'info',
-            summary: 'Validation Passed',
-            detail: `Ready to assign user ${userName} to test run ${run.id}.`
         });
-        this.closeAssigneeModal();
     }
 
     closeAssigneeModal() {

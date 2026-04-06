@@ -8,6 +8,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { globalLoaderInterceptor } from './core/interceptors/global-loader.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
@@ -33,7 +34,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(
       withFetch(),
-      withInterceptors([authInterceptor])
+      withInterceptors([authInterceptor, globalLoaderInterceptor])
     ),
     DialogService,
   ]

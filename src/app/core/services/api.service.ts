@@ -1,7 +1,10 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { enviorment } from '../../../enviorments/environment';
+export interface ApiRequestOptions {
+  context?: HttpContext;
+}
 
 @Injectable({
     providedIn: 'root',
@@ -11,7 +14,7 @@ export class ApiService {
     private baseUrl = enviorment.baseUrl;
 
     // Generic Get
-    regularGetRequest<T>(path: string, params?: any): Observable<T> {
+    regularGetRequest<T>(path: string, params?: any,options?:ApiRequestOptions): Observable<T> {
         let httpParams = new HttpParams();
         if (params) {
             Object.keys(params).forEach((key) => {
@@ -20,21 +23,21 @@ export class ApiService {
                 }
             });
         }
-        return this.http.get<T>(`${this.baseUrl}/${path}`, { params: httpParams });
+        return this.http.get<T>(`${this.baseUrl}/${path}`, { params: httpParams,context:options?.context});
     }
     
   // Generic POST
-  post<T>(path: string, body: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}/${path}`, body);
+  post<T>(path: string, body: any,options?:ApiRequestOptions): Observable<T> {
+    return this.http.post<T>(`${this.baseUrl}/${path}`, body,{context:options?.context});
   }
 
   // Generic PUT
-  put<T>(path: string, body: any): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}/${path}`, body);
+  put<T>(path: string, body: any,options?:ApiRequestOptions): Observable<T> {
+    return this.http.put<T>(`${this.baseUrl}/${path}`, body,{context:options?.context});
   }
 
   // Generic DELETE
-  delete<T>(path: string): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}/${path}`);
+  delete<T>(path: string,options?:ApiRequestOptions): Observable<T> {
+    return this.http.delete<T>(`${this.baseUrl}/${path}`,{context:options?.context});
   }
 }
