@@ -197,13 +197,7 @@ export class TestRunList implements OnInit {
             width: '30rem'
         });
     }
-    testLoader() {
-  const handle = this.globalLoader.show('Testing global loader...');
 
-  setTimeout(() => {
-    handle.close();
-  }, 20000);
-}
 
 
     submitAssignee() {
