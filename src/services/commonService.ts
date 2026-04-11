@@ -16,7 +16,7 @@ export interface LoginResponse {
 
 export class CommonService {
     private api = inject(ApiService);
-    getAllProjects(page: number = 0, size: number = 10): Observable<any> {
+    getAllProjects(page: number, size: number): Observable<any> {
         return this.api.regularGetRequest<any>('projects', { page, size });
     }
     getProjectById(id: any) {
@@ -165,6 +165,17 @@ export class CommonService {
             }),
             catchError((err) => {
                 return throwError(() => err)
+            })
+        )
+    }
+    createTestRun(suiteId:string,body:object){
+        let url = `testsuites/${suiteId}/testruns`
+        return this.api.post(url,body).pipe(
+            tap((res)=>{
+                console.log('added run successfully');
+            }),
+            catchError((err)=>{
+                return throwError(()=>err)
             })
         )
     }

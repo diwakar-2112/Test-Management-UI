@@ -104,7 +104,7 @@
     <section class="bg-surface/90 border border-border rounded-3xl shadow-xl shadow-black/5 overflow-hidden">
         <!-- Table Header -->
         <div
-            class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-border bg-background/50 text-[11px] font-bold text-text-secondary uppercase tracking-widest hidden md:grid">
+            class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-border bg-background/50 text-[11px] font-bold text-text-secondary uppercase tracking-widest md:grid">
             <div class="col-span-1">#</div>
             <div class="col-span-4">Run Name</div>
             <div class="col-span-2">Assigned To</div>
@@ -259,6 +259,87 @@
             <button type="submit"
                 class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-500/25 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-200">
                 Add Assignee
+            </button>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #createTestRunModal>
+    <form [formGroup]="createTestRunForm" (ngSubmit)="submitCreateTestRun()" class="flex flex-col gap-5 p-4">
+        <div class="rounded-2xl border border-border bg-background/60 px-4 py-4">
+            <div class="flex items-start gap-3">
+                <div
+                    class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500/15 to-surface border border-blue-500/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 4v16m8-8H4M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-text-main">Create a New Test Run</p>
+                    <p class="text-xs text-text-secondary mt-1">
+                        Temporary hardcoded fields for UI integration.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <p-floatlabel variant="on">
+                <input pInputText id="runName" formControlName="name" class="w-full custom-input-premium"
+                    [ngClass]="{
+                        'ng-invalid ng-dirty border-red-500': isCreateRunFormSubmitted() && createTestRunForm.get('name')?.errors?.['required']
+                    }" />
+                <label for="runName">Test Run Name</label>
+            </p-floatlabel>
+            @if (isCreateRunFormSubmitted() && createTestRunForm.get('name')?.errors?.['required']) {
+            <small class="text-red-500 text-[10px] font-bold ml-1 animate-pulse">Please enter a test run
+                name</small>
+            }
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <p-floatlabel variant="on">
+                    <p-select id="project" formControlName="project" [options]="projects()" (onChange)="onChange($event)"
+                        optionLabel="name" optionValue="id" appendTo="body" [showClear]="true" class="w-full"
+                        styleClass="w-full custom-select-premium" [ngClass]="{
+                            'ng-invalid ng-dirty border-red-500': isCreateRunFormSubmitted() && createTestRunForm.get('project')?.errors?.['required']
+                        }"></p-select>
+                    <label for="project">Project</label>
+                </p-floatlabel>
+                @if (isCreateRunFormSubmitted() && createTestRunForm.get('project')?.errors?.['required']) {
+                <small class="text-red-500 text-[10px] font-bold ml-1 animate-pulse">Please select a project</small>
+                }
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <p-floatlabel variant="on">
+                    <p-select  id="suite" formControlName="suite" [options]="createSuiteOptions"
+                        optionLabel="label" optionValue="value" appendTo="body" [showClear]="true" class="w-full"
+                        styleClass="w-full custom-select-premium" [ngClass]="{
+                            'ng-invalid ng-dirty border-red-500': isCreateRunFormSubmitted() && createTestRunForm.get('suite')?.errors?.['required']
+                        }"></p-select>
+                    <label for="suite">Test Suite</label>
+                </p-floatlabel>
+                @if (isCreateRunFormSubmitted() && createTestRunForm.get('suite')?.errors?.['required']) {
+                <small class="text-red-500 text-[10px] font-bold ml-1 animate-pulse">Please select a test suite</small>
+                }
+            </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-1">
+            <button type="button" (click)="closeCreateModal()"
+                class="px-5 py-2.5 rounded-xl text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main border border-transparent hover:border-border/50 transition-all duration-200">
+                Cancel
+            </button>
+            <button type="submit"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-500/25 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                Create Run
             </button>
         </div>
     </form>
