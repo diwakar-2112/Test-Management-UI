@@ -220,8 +220,6 @@ export class TestRunList implements OnInit {
       return;
     }
 
-    console.log('Create test run payload:', typeof this.createTestRunForm.getRawValue().suite);
-    console.log('Create test run payload:', typeof this.createTestRunForm.getRawValue().name);
     let body = {
       name: this.createTestRunForm.getRawValue().name,
     };
@@ -233,6 +231,7 @@ export class TestRunList implements OnInit {
             severity: 'success',
             summary: `Test Run ${res?.name} added successfully`
           });
+          this.getTestRuns();
         },
         error: (err) => {},
       });
