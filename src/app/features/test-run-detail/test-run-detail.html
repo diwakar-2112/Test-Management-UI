@@ -1,0 +1,113 @@
+<div class="p-6">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm mb-6">
+        <a routerLink="/projects"
+            class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 7h7v10H3zM14 7h7v6h-7zM14 15h7v2a2 2 0 0 1-2 2h-5z" />
+            </svg>
+            Projects
+        </a>
+        <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        <a routerLink="/test-runs"
+            class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
+            Test Runs
+        </a>
+        <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        <span class="text-gray-900 dark:text-white font-bold">{{ testRun()?.name || 'Run Details' }}</span>
+    </nav>
+
+    <!-- Header info -->
+    <section class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm mb-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ testRun()?.name }}</h1>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                    ID: {{ testRun()?.id }} | Project ID: {{ testRun()?.projectId }}
+                </p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-lg"
+                    [ngClass]="getStatusBadgeClass(testRun()?.status)">
+                    {{ testRun()?.status }}
+                </span>
+            </div>
+        </div>
+        
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 dark:text-gray-300">
+            <div>
+                <span class="font-semibold text-gray-900 dark:text-white text-xs uppercase tracking-wider">Assignee:</span>
+                <span class="ml-2">{{ testRun()?.assignee?.username || 'Unassigned' }}</span>
+            </div>
+            <div>
+                <span class="font-semibold text-gray-900 dark:text-white text-xs uppercase tracking-wider">Created At:</span>
+                <span class="ml-2">{{ testRun()?.createdAt | date:'medium' }}</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Test Cases Listing -->
+    <section class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm mb-8">
+        <!-- Table Header -->
+        <div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden md:grid rounded-t-xl">
+            <div class="col-span-1">ID</div>
+            <div class="col-span-3">Title</div>
+            <div class="col-span-3">Description / Steps</div>
+            <div class="col-span-3">Expected Result</div>
+            <div class="col-span-2 text-right">Status Actions</div>
+        </div>
+
+        <!-- List rows -->
+        @for (tc of testRun()?.testResults; track tc.id) {
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-4 border-b border-gray-100 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 items-start">
+            
+            <div class="col-span-1">
+                <span class="text-xs font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded border border-gray-200 dark:border-gray-700">
+                    #{{ tc.id }}
+                </span>
+            </div>
+
+            <div class="col-span-3">
+                <p class="text-sm font-bold text-gray-900 dark:text-white">{{ tc.title }}</p>
+                <div class="mt-2 inline-block">
+                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded border"
+                        [ngClass]="getStatusBadgeClass(tc.status)">
+                        {{ tc.status }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-span-3 text-sm text-gray-600 dark:text-gray-300">
+                <p><span class="font-semibold text-xs text-gray-900 dark:text-gray-100 uppercase">Desc:</span> {{ tc.description || 'N/A' }}</p>
+                <p class="mt-1"><span class="font-semibold text-xs text-gray-900 dark:text-gray-100 uppercase">Steps:</span> {{ tc.steps || 'N/A' }}</p>
+            </div>
+
+            <div class="col-span-3 text-sm text-gray-600 dark:text-gray-300">
+                <p>{{ tc.expectedResult || 'N/A' }}</p>
+            </div>
+
+            <div class="col-span-2 flex flex-wrap justify-end gap-2">
+                <button (click)="updateTestStatus(tc.id, 'PASSED')"
+                    class="px-2.5 py-1 text-xs font-bold rounded bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/40 dark:text-green-400 dark:hover:bg-green-900/60 border border-green-200 dark:border-green-800 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    Pass
+                </button>
+                <button (click)="updateTestStatus(tc.id, 'FAILED')"
+                    class="px-2.5 py-1 text-xs font-bold rounded bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/40 dark:text-red-400 dark:hover:bg-red-900/60 border border-red-200 dark:border-red-800 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    Fail
+                </button>
+            </div>
+        </div>
+        }
+
+        @if (!testRun()?.testResults?.length) {
+            <div class="py-12 text-center">
+                <p class="text-gray-500 dark:text-gray-400 font-medium">No test cases found for this run.</p>
+            </div>
+        }
+    </section>
+</div>

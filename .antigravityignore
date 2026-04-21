@@ -1,0 +1,7 @@
+# Stop indexing heavy dependencies
+node_modules/
+dist/
+*.log
+package-lock.json
+*.png
+*.jpg

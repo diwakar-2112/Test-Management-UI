@@ -251,6 +251,7 @@ export class TestRunList implements OnInit {
 
   navigateToExecution(run: TestRun) {
     event?.preventDefault();
+    this.router.navigate(['/test-runs', run.id]);
   }
 
   assignUser(event: MouseEvent | KeyboardEvent, run: TestRun) {

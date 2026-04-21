@@ -1,0 +1,3 @@
+/* test-run-detail.css */
+/* No transitions are used as per the user's request to avoid UI lagging. */
+/* Colors and layout are managed by Tailwind CSS utility classes in the HTML. */

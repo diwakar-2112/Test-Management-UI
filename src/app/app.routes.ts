@@ -33,6 +33,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/test-run-list/test-run-list').then(m => m.TestRunList)
       },
       {
+        path: 'test-runs/:runId',
+        loadComponent: () => import('./features/test-run-detail/test-run-detail').then(m => m.TestRunDetail)
+      },
+      {
         path: 'dashboard',
         redirectTo: 'projects',
         pathMatch: 'full'
