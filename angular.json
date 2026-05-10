@@ -20,6 +20,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/app/assets",
+                "output": "/assets/"
               }
             ],
             "styles": [
@@ -84,7 +89,8 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/_redirects"
             ],
             "styles": [
               "src/styles.css"
