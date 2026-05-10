@@ -6,8 +6,8 @@ import { withSkipLoader } from '../app/core/interceptors/global-loader.intercept
 export interface LoginResponse {
     accessToken: string;
     tokenType: string;
-    userName: string; // <--- ADD THIS
-    role: string;     // <--- ADD THIS
+    userName: string;
+    role: string;     
 }
 @Injectable({
     providedIn: 'root'
@@ -27,6 +27,17 @@ export class CommonService {
         return this.api.post<LoginResponse>('auth/login', body).pipe(
             tap((response) => {
                 if (response && response.accessToken) {
+                    localStorage.setItem('userName', response.userName)
+                    localStorage.setItem('token', response.accessToken);
+                }
+            })
+        )
+    }
+    googleAuthLogin(idToken:any){
+        let url = `auth/google`;
+        return this.api.post<any>(url,{idToken: idToken}).pipe(
+            tap((response)=>{
+                 if (response && response.accessToken) {
                     localStorage.setItem('userName', response.userName)
                     localStorage.setItem('token', response.accessToken);
                 }
@@ -176,6 +187,17 @@ export class CommonService {
             }),
             catchError((err)=>{
                 return throwError(()=>err)
+            })
+        )
+    }
+    getTestRunById(runId:string){
+        let url = `testruns/${runId}`;
+        return this.api.regularGetRequest(url).pipe(
+            tap((res)=>{
+                console.log('run fetch successfully');
+            }),
+            catchError((error)=>{
+                return throwError(()=>error)
             })
         )
     }

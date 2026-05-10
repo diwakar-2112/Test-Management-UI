@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal,NgZone, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,7 +18,10 @@ import { MessageService } from 'primeng/api';
 
 // import { AuthService } from '../../../core/auth/auth.service';
 import { CommonService as commonService } from '../../../../../services/commonService';
-
+//Google login
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../enviorments/environment';
+declare var google:any;
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -39,11 +42,44 @@ import { CommonService as commonService } from '../../../../../services/commonSe
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
-export class Login {
+export class Login implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(commonService);
   private router = inject(Router);
   private messageService = inject(MessageService);
+  private http = inject(HttpClient);
+  private ngZone = inject(NgZone);
+  private clientId = environment.googleClientId;
+   ngOnInit(): void {
+    // Initialize the Google SDK
+     google.accounts.id.initialize({
+      client_id:this.clientId,
+      // Tell Google which function to call when the user logs in
+      callback:this.handleGoogleLogin.bind(this)
+     })
+
+     //  Tell Google to draw the button inside our HTML div
+    google.accounts.id.renderButton(
+      document.getElementById('google-btn'),
+      { theme: 'outline', size: 'large', width: '100%',shape:'pill' } ,
+      google.accounts.id.prompt()
+    );
+   }
+   handleGoogleLogin(response:any){
+    const googleIdtoken = response.credential;
+    this.ngZone.run(()=>{
+      this.authService.googleAuthLogin(googleIdtoken).subscribe({
+        next:(res:any)=>{
+          localStorage.setItem('token', res.accessToken);
+          localStorage.setItem('userName', res.userName)
+          this.router.navigate(['/dashboard']);
+        },
+        error:(err=>{
+          console.log('token error',err);
+        })
+      })
+    })
+   }
   showError() {
     this.messageService.add({
       severity: 'error',
@@ -73,6 +109,7 @@ export class Login {
     this.loginForm.reset();
   }
 
+  readonly isSignup = computed(() => this.isSignupMode());
   onSubmit() {
     if (this.loginForm.invalid) return;
 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { enviorment } from '../../../enviorments/environment';
+import { environment  } from '../../../enviorments/environment';
 export interface ApiRequestOptions {
   context?: HttpContext;
 }
@@ -11,7 +11,7 @@ export interface ApiRequestOptions {
 })
 export class ApiService {
     private http = inject(HttpClient);
-    private baseUrl = enviorment.baseUrl;
+    private baseUrl = environment.baseUrl;
 
     // Generic Get
     regularGetRequest<T>(path: string, params?: any,options?:ApiRequestOptions): Observable<T> {

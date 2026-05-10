@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, signal, computed, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-
+import { CommonService } from '../../../services/commonService';
 @Component({
   selector: 'app-test-run-detail',
   standalone: true,
@@ -12,69 +12,84 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 })
 export class TestRunDetail implements OnInit {
   private route = inject(ActivatedRoute);
-
-  testRun = signal<any>(null);
+  private commonService = inject(CommonService);
+  testRunData = signal<any>(null);
   loading = signal<boolean>(false);
+  showStatusModal = signal<boolean>(false);
+  selectedTestId = signal<number | null>(null);
+  selectedStatus = signal<'PASSED' | 'FAILED'>('PASSED');
+  statusComment = signal<string>('');
   
   // Dummy data just for visualization, to be replaced by API call later
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const runId = params.get('runId');
-      this.getTestRunDetails(Number(runId));
+      console.log(typeof runId,'runId');
+      
+      this.getTestRunDetails(String(runId));
     });
   }
 
-  getTestRunDetails(runId: number) {
+  getTestRunDetails(runId: string) {
     this.loading.set(true);
-    // Simulate getting data without timeout delays (user specifically said no timeout for lagging UI)
-    const dummyData = {
-      id: runId || 57,
-      name: "Gaming Test Run",
-      status: "NOT_STARTED",
-      createdAt: "2026-04-17T16:19:34.763658",
-      projectId: 1,
-      assignee: {
-        id: 3,
-        username: "dev.diwakar"
+    this.commonService.getTestRunById(runId).subscribe({
+      next:(res)=>{
+        this.testRunData.set(res);
+        this.loading.set(false);
       },
-      testResults: [
-        {
-          id: 257,
-          status: "NOT_RUN",
-          comments: null,
-          title: "V1 Testing",
-          description: "V1 Testing",
-          steps: "Step1",
-          expectedResult: "expected result"
-        },
-        {
-          id: 258,
-          status: "NOT_RUN",
-          comments: null,
-          title: "v1 2nd testcase",
-          description: "This is v1 2nd testcase",
-          steps: "These are the steps",
-          expectedResult: "These are the expected results."
-        }
-      ]
-    };
-    
-    this.testRun.set(dummyData);
-    this.loading.set(false);
+      error:(err)=>{
+        console.log(err);
+        this.loading.set(false);
+      }
+    })
   }
 
-  updateTestStatus(testId: number, status: string) {
-    // Dummy update without transition
-    const currentData = this.testRun();
+  openStatusModal(testId: number, currentStatus: string) {
+    this.selectedTestId.set(testId);
+    this.selectedStatus.set(currentStatus === 'FAILED' ? 'FAILED' : 'PASSED');
+    this.statusComment.set('');
+    this.showStatusModal.set(true);
+  }
+
+  closeStatusModal() {
+    this.showStatusModal.set(false);
+    this.selectedTestId.set(null);
+    this.statusComment.set('');
+    this.selectedStatus.set('PASSED');
+  }
+
+  setStatus(status: 'PASSED' | 'FAILED') {
+    this.selectedStatus.set(status);
+  }
+
+  onStatusCommentChange(event: Event) {
+    const target = event.target as HTMLTextAreaElement;
+    this.statusComment.set(target.value);
+  }
+
+  submitStatusUpdate() {
+    const testId = this.selectedTestId();
+    if (testId === null) {
+      return;
+    }
+
+    const currentData = this.testRunData();
     if (currentData) {
       const updatedResults = currentData.testResults.map((tr: any) => {
         if (tr.id === testId) {
-          return { ...tr, status: status };
+          return {
+            ...tr,
+            status: this.selectedStatus(),
+            comment: this.statusComment().trim()
+          };
         }
         return tr;
       });
-      this.testRun.set({ ...currentData, testResults: updatedResults });
+
+      this.testRunData.set({ ...currentData, testResults: updatedResults });
     }
+
+    this.closeStatusModal();
   }
 
   getStatusBadgeClass(status: string): string {

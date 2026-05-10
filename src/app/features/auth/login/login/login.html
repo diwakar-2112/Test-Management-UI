@@ -12,43 +12,38 @@
       <label for="username">EMAIL ADDRESS</label>
       <div class="p-input-icon-left full-width">
         <i class="pi pi-at"></i>
-        <input
-          pInputText
-          formControlName="username"
-          id="email"
-          placeholder="name@company.com"
-          class="custom-input"
-        />
+        <input pInputText formControlName="username" id="email" placeholder="name@company.com" class="custom-input" />
         <small *ngIf="isFieldInvalid('username')" class="error-text"> Username is required </small>
       </div>
 
       <div class="label-row">
         <label for="password">PASSWORD</label>
-        <a href="#" class="forgot-link">Forgot password?</a>
+        <!-- <a href="#" class="forgot-link">Forgot password?</a> -->
       </div>
       <div class="p-input-icon-left full-width">
         <i class="pi pi-lock"></i>
-        <input
-          formControlName="password"
-          placeholder="Enter your password"
-          styleClass="w-full"
-          class="custom-input"
-          [style]="{ width: '100%' }"
-        />
+        <input formControlName="password" placeholder="Enter your password" styleClass="w-full" class="custom-input"
+          [style]="{ width: '100%' }" />
+        <small *ngIf="isFieldInvalid('password')" class="error-text"> Password is required </small>
       </div>
 
-      <p-button
-        [label]="isSignupMode() ? 'Sign up' : 'Sign in'"
-        (click)="onSubmit()"
-         [loading]="isLoading()"
-        [style]="{ width: '100%' }"
-        styleClass="gradient-button full-width-btn"
-      ></p-button>
+      <p-button [label]="isSignupMode() ? 'Sign up' : 'Sign in'" (click)="onSubmit()" [loading]="isLoading()"
+        [style]="{ width: '100%' }" styleClass="gradient-button full-width-btn"></p-button>
     </form>
-
+    <!-- login.component.html -->
+    <div class="login-container">
+      <h2>Sign In</h2>
+      <div id="google-btn"></div>
+    </div>
     <div class="footer">
-      <span>Don't have an account? </span>
-      <a href="javascript:void(0)" (click)="toggleSign()">Sign up now</a>
+      @if(isSignup()){
+      <div (click)="toggleSign()" class="cursor-pointer">
+        Back to Sign In
+      </div>
+      }
+      @else{
+      <span>Don't have an account? </span><a href="javascript:void(0)" (click)="toggleSign()"> Sign up now</a>
+      }
     </div>
   </div>
 </div>

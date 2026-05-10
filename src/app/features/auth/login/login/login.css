@@ -15,7 +15,9 @@
   position: relative;
   overflow: hidden;
 }
-
+.error-text{
+  color: rgb(222, 141, 141);
+}
 /* Pseudo-elements for the purple ambient glow effects */
 .page-background::before, .page-background::after {
   content: '';
