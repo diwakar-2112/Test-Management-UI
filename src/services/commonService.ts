@@ -201,4 +201,16 @@ export class CommonService {
             })
         )
     }
+    updateTestRunStatus(body:object,resultId:any){
+        let url = `testruns/results/${resultId}`
+        return this.api.put(url,body).pipe(
+            tap((res)=>{
+                console.log('run status updated');
+                
+            }),
+            catchError((error)=>{
+                return throwError(()=>error)
+            })
+        )
+    }
 }

@@ -1,14 +1,14 @@
 <!-- Layout Wrapper -->
-<div class="h-screen flex bg-background text-text-main overflow-hidden transition-colors duration-300">
+<div class="h-screen flex bg-background text-text-main overflow-hidden transition-colors ">
 
     <!-- Sidebar (Desktop) - Fixed Width & Glass Effect in Dark Mode -->
     <aside
-        class="hidden md:flex w-72 flex-col bg-surface/95 backdrop-blur-sm border-r border-border z-20 transition-colors duration-300">
+        class="hidden md:flex w-72 flex-col bg-surface/95 backdrop-blur-sm border-r border-border z-20 transition-colors ">
 
         <!-- Logo Area -->
         <div class="h-20 flex items-center gap-4 px-8 border-b border-border/50">
             <div
-                class="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-orange-600 shadow-lg shadow-primary/40 flex items-center justify-center text-sm font-extrabold text-white tracking-wide transform hover:scale-110 transition-transform duration-300 cursor-pointer">
+                class="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-orange-600 shadow-lg shadow-primary/40 flex items-center justify-center text-sm font-extrabold text-white tracking-wide transform hover:scale-110 transition-transform  cursor-pointer">
                 QA
             </div>
             <div class="flex flex-col">
@@ -28,7 +28,7 @@
             <a routerLink="/projects"
                 routerLinkActive="bg-primary/10 text-primary shadow-[0_0_20px_rgba(var(--primary)_/_0.15)] border-primary/20"
                 [routerLinkActiveOptions]="{ exact: false }"
-                class="relative w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-text-secondary rounded-2xl border border-transparent transition-all duration-300 hover:text-text-main group overflow-hidden">
+                class="relative w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-text-secondary rounded-2xl border border-transparent   hover:text-text-main group overflow-hidden">
 
                 <!-- Shine Effect (Only visible when active - controlled manually or via CSS if needed, 
              but simpler to just have it on the element structure) -->
@@ -46,9 +46,8 @@
             <a routerLink="/test-runs"
                 routerLinkActive="bg-primary/10 text-primary shadow-[0_0_20px_rgba(var(--primary)_/_0.15)] border-primary/20"
                 [routerLinkActiveOptions]="{ exact: false }"
-                class="group relative w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-text-secondary rounded-2xl border border-transparent hover:bg-surface-highlight hover:text-text-main transition-all duration-300 overflow-hidden">
-                <svg class="w-5 h-5 transition-colors duration-300"
-                    [class.text-primary]="true" 
+                class="group relative w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-text-secondary rounded-2xl border border-transparent hover:bg-surface-highlight hover:text-text-main   overflow-hidden">
+                <svg class="w-5 h-5"
                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" />
                 </svg>
@@ -56,8 +55,8 @@
             </a>
 
             <button
-                class="group w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-text-secondary rounded-2xl hover:bg-surface-highlight hover:text-text-main transition-all duration-200">
-                <svg class="w-5 h-5 text-text-secondary group-hover:text-primary transition-colors duration-300"
+                class="group w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-text-secondary rounded-2xl hover:bg-surface-highlight hover:text-text-main  ">
+                <svg class="w-5 h-5 text-text-secondary group-hover:text-primary transition-colors "
                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -66,8 +65,8 @@
             </button>
 
             <button
-                class="group w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-text-secondary rounded-2xl hover:bg-surface-highlight hover:text-text-main transition-all duration-200">
-                <svg class="w-5 h-5 text-text-secondary group-hover:text-primary transition-colors duration-300"
+                class="group w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-text-secondary rounded-2xl hover:bg-surface-highlight hover:text-text-main  ">
+                <svg class="w-5 h-5 text-text-secondary group-hover:text-primary transition-colors "
                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm7 8a7 7 0 0 0-14 0" />
@@ -109,7 +108,7 @@
 
         <!-- Top Header (Floating & Glassy) -->
         <header
-            class="h-20 flex items-center justify-between px-6 lg:px-10 z-30 sticky top-0 bg-background/70 backdrop-blur-xl border-b border-white/5 transition-all">
+            class="h-20 flex items-center justify-between px-6 lg:px-10 z-30 sticky top-0 bg-background/70 backdrop-blur-xl border-b border-white/5 ">
 
             <!-- Left: Breadcrumb -->
             <div class="flex items-center gap-4 animate-entry">
@@ -130,23 +129,23 @@
             </div>
 
             <!-- Right: Actions -->
-            <div class="flex items-center gap-3 sm:gap-5 animate-entry delay-100">
+            <div class="flex items-center gap-3 sm:gap-5 animate-entry">
 
                 <!-- Theme Toggle (Animated) -->
                 <button (click)="toggleTheme()"
-                    class="relative p-2.5 rounded-full bg-surface border border-border text-text-secondary hover:text-primary hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 active:scale-90 group overflow-hidden">
-                    <div class="relative z-10 transition-transform duration-500 rotate-0 dark:rotate-180">
+                    class="relative p-2.5 rounded-full bg-surface border border-border text-text-secondary hover:text-primary hover:border-primary/30   hover:shadow-lg hover:shadow-primary/20 active:scale-90 group overflow-hidden">
+                    <div class="relative z-10 transition-transform  rotate-0 dark:rotate-180">
                         @if (themeService.themeSignal() === 'dark') {
-                        <mat-icon class="text-[22px] animate-in fade-in zoom-in duration-300">light_mode</mat-icon>
+                        <mat-icon class="text-[22px] animate-in fade-in zoom-in ">light_mode</mat-icon>
                         } @else {
-                        <mat-icon class="text-[22px] animate-in fade-in zoom-in duration-300">dark_mode</mat-icon>
+                        <mat-icon class="text-[22px] animate-in fade-in zoom-in ">dark_mode</mat-icon>
                         }
                     </div>
                 </button>
 
                 <!-- Notification Bell -->
                 <button
-                    class="relative p-2.5 rounded-full bg-surface text-text-secondary hover:text-primary border border-border hover:border-primary/30 transition-all hover:shadow-md active:scale-95">
+                    class="relative p-2.5 rounded-full bg-surface text-text-secondary hover:text-primary border border-border hover:border-primary/30  hover:shadow-md active:scale-95">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path
                             d="M14.857 17.657A2 2 0 0 1 13 19H11a2 2 0 0 1-1.857-1.343M15 8a3 3 0 1 0-6 0c0 3-1 4-2 5h10c-1-1-2-2-2-5Z" />
@@ -157,7 +156,7 @@
 
                 <!-- User Profile (Pill Shape) -->
                 <button
-                    class="flex items-center gap-3 pl-1 pr-4 py-1.5 rounded-full bg-surface border border-border shadow-sm hover:shadow-md hover:border-primary/20 transition-all active:scale-95 group">
+                    class="flex items-center gap-3 pl-1 pr-4 py-1.5 rounded-full bg-surface border border-border shadow-sm hover:shadow-md hover:border-primary/20  active:scale-95 group">
                     <div
                         class="h-9 w-9 rounded-full bg-gradient-to-tr from-primary to-purple-600 text-white text-xs font-bold flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                         {{ initials() }}

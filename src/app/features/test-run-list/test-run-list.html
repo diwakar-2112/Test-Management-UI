@@ -2,7 +2,7 @@
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-sm mb-8">
         <a routerLink="/projects"
-            class="text-text-secondary hover:text-primary font-medium transition-colors duration-200 flex items-center gap-1.5">
+            class="text-text-secondary hover:text-primary font-medium transition-colors  flex items-center gap-1.5">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M3 7h7v10H3zM14 7h7v6h-7zM14 15h7v2a2 2 0 0 1-2 2h-5z" />
@@ -43,7 +43,7 @@
 
             <div class="flex items-center gap-3">
                 <button (click)="openCreateModal()"
-                    class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95">
+                    class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30  hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path d="M12 4v16m8-8H4" />
                     </svg>
@@ -57,7 +57,7 @@
     <section class="bg-surface/90 border border-border rounded-2xl shadow-sm mb-8 px-6 py-5">
         <form [formGroup]="filterForm" class="flex flex-col md:flex-row gap-4 items-center w-full">
             <div
-                class="w-full md:w-1/3 flex items-center bg-background border border-border rounded-xl px-4 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all h-12">
+                class="w-full md:w-1/3 flex items-center bg-background border border-border rounded-xl px-4 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20  h-12">
                 <svg class="w-5 h-5 text-text-secondary mr-2" fill="none" stroke="currentColor" stroke-width="2"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -116,7 +116,7 @@
         <!-- List rows -->
         @for (run of testRuns(); track run.id; let idx = $index) {
         <div (click)="navigateToExecution(run)"
-            class="group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 border-b border-border/50 last:border-b-0 hover:bg-blue-500/[0.03] transition-colors duration-200 cursor-pointer items-center">
+            class="group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 border-b border-border/50 last:border-b-0 hover:bg-blue-500/[0.03] transition-colors  cursor-pointer items-center">
 
             <div class="col-span-1 hidden md:block">
                 <span
@@ -127,7 +127,7 @@
 
             <div class="col-span-4 flex items-center gap-3">
                 <div
-                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/10 to-surface border border-blue-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/10 to-surface border border-blue-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform ">
                     <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -152,7 +152,7 @@
                 </div>
                 } @else {
                 <button type="button" (click)="assignUser($event, run)"
-                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 text-blue-500 text-[11px] font-semibold hover:bg-blue-500/20 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 active:scale-95 transition-all duration-200">
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 text-blue-500 text-[11px] font-semibold hover:bg-blue-500/20 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 active:scale-95  ">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
@@ -175,7 +175,7 @@
 
             <div class="col-span-1 flex justify-end gap-1">
                 <button (click)="$event.stopPropagation(); navigateToExecution(run)"
-                    class="p-2 rounded-lg text-text-secondary hover:text-blue-500 hover:bg-blue-500/10 transition-all duration-200 active:scale-90">
+                    class="p-2 rounded-lg text-text-secondary hover:text-blue-500 hover:bg-blue-500/10   active:scale-90">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
@@ -209,7 +209,7 @@
                 We couldn't find any test runs matching your criteria, or you haven't created one yet.
             </p>
             <button (click)="openCreateModal()"
-                class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-1 active:scale-95">
+                class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/30  hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-1 active:scale-95">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <path d="M12 4v16m8-8H4" />
                 </svg>
@@ -253,11 +253,11 @@
 
         <div class="flex items-center justify-end gap-3 pt-1">
             <button type="button" (click)="closeAssigneeModal()"
-                class="px-5 py-2.5 rounded-xl text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main border border-transparent hover:border-border/50 transition-all duration-200">
+                class="px-5 py-2.5 rounded-xl text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main border border-transparent hover:border-border/50  ">
                 Cancel
             </button>
             <button type="submit"
-                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-500/25 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-200">
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-500/25 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95  ">
                 Add Assignee
             </button>
         </div>
@@ -331,11 +331,11 @@
 
         <div class="flex items-center justify-end gap-3 pt-1">
             <button type="button" (click)="closeCreateModal()"
-                class="px-5 py-2.5 rounded-xl text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main border border-transparent hover:border-border/50 transition-all duration-200">
+                class="px-5 py-2.5 rounded-xl text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main border border-transparent hover:border-border/50  ">
                 Cancel
             </button>
             <button type="submit"
-                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-500/25 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-200">
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-500/25 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95  ">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>

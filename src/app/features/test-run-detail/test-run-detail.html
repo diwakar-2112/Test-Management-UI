@@ -1,4 +1,4 @@
-<div class="p-6">
+<div class="">
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-sm mb-6">
         <a routerLink="/projects"
@@ -33,8 +33,10 @@
             </div>
             <div class="flex items-center gap-4">
                 <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-lg"
-                    [ngClass]="getStatusBadgeClass(testRunData()?.status)">
-                    {{ testRunData()?.status }}
+                    [style.color]="getStatus(testRunData()?.status)?.color || 'inherit'">
+                    <!-- {{ testRunData()?.status }} -->
+                      {{ getStatus(testRunData()?.status)?.label }}
+                    
                 </span>
             </div>
         </div>
@@ -73,12 +75,8 @@
             </div>
 
             <div class="col-span-3">
-                <p class="text-sm font-bold text-gray-900 dark:text-white">{{ tc.title }}</p>
-                <div class="mt-2 inline-block">
-                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded border"
-                        [ngClass]="getStatusBadgeClass(tc.status)">
-                        {{ tc.status }}
-                    </span>
+                <p class="text-sm font-bold text-gray-900 dark:text-white" [style.color]="getStatus(tc.status)?.color"> {{ getStatus(tc.status)?.label }}</p>
+                <div class="mt-2 inline-block"> 
                 </div>
             </div>
 
@@ -126,15 +124,15 @@
         <div class="mb-4">
             <p class="text-xs font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-2">Status</p>
             <div class="flex gap-2">
-                <button (click)="setStatus('PASSED')"
-                    [ngClass]="selectedStatus() === 'PASSED'
+                <button (click)="setStatus('PASS')"
+                    [ngClass]="selectedStatus() === 'PASS'
                         ? 'bg-green-600 text-white border-green-600'
                         : 'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/40 dark:text-green-400 dark:border-green-800'"
                     class="flex-1 px-3 py-2 text-sm font-bold rounded border focus:outline-none focus:ring-2 focus:ring-green-500">
                     Pass
                 </button>
-                <button (click)="setStatus('FAILED')"
-                    [ngClass]="selectedStatus() === 'FAILED'
+                <button (click)="setStatus('FAIL')"
+                    [ngClass]="selectedStatus() === 'FAIL'
                         ? 'bg-red-600 text-white border-red-600'
                         : 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/40 dark:text-red-400 dark:border-red-800'"
                     class="flex-1 px-3 py-2 text-sm font-bold rounded border focus:outline-none focus:ring-2 focus:ring-red-500">

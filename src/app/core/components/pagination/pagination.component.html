@@ -18,7 +18,7 @@
     <div class="flex items-center gap-1">
         <!-- Prev -->
         <button (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 0"
-            class="p-2 rounded-xl text-text-secondary hover:text-text-main hover:bg-surface transition-all disabled:opacity-30 disabled:cursor-not-allowed active:scale-90">
+            class="p-2 rounded-xl text-text-secondary hover:text-text-main hover:bg-surface  disabled:opacity-30 disabled:cursor-not-allowed active:scale-90">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
@@ -31,8 +31,8 @@
             } @else {
                 <button (click)="goToPage(page)"
                     [class]="page === currentPage()
-                            ? 'w-9 h-9 rounded-xl bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/30 transition-all'
-                            : 'w-9 h-9 rounded-xl text-text-secondary text-xs font-bold hover:bg-surface hover:text-text-main transition-all active:scale-90'">
+                            ? 'w-9 h-9 rounded-xl bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/30 '
+                            : 'w-9 h-9 rounded-xl text-text-secondary text-xs font-bold hover:bg-surface hover:text-text-main  active:scale-90'">
                     {{ page + 1 }}
                 </button>
             }
@@ -40,7 +40,7 @@
 
         <!-- Next -->
         <button (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() >= totalPages() - 1 || totalPages() === 0"
-            class="p-2 rounded-xl text-text-secondary hover:text-text-main hover:bg-surface transition-all disabled:opacity-30 disabled:cursor-not-allowed active:scale-90">
+            class="p-2 rounded-xl text-text-secondary hover:text-text-main hover:bg-surface  disabled:opacity-30 disabled:cursor-not-allowed active:scale-90">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
             </svg>

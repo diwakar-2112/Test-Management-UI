@@ -317,8 +317,8 @@ export class TestRunList implements OnInit {
     console.log(event.value, 'hello');
     this.commonService.getTestSuites(event?.value, { isAll: true }).subscribe({
       next: (res) => {
-        console.log(res, 'res');
-        this.createSuiteOptions = (res || []).map((elem: any) => ({
+        console.log('typeof res.totalTestCases', res);
+        this.createSuiteOptions = (res || []) .filter((elem: any) => elem.totalTestCases > 0).map((elem: any) => ({
           label: elem.name,
           value: elem.id,
         }));

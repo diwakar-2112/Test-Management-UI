@@ -79,3 +79,12 @@ export interface User {
   id: number;
   username: string;
 }
+export const Status = {
+  PASS:        { label: "PASS",        color: "#059669" }, // emerald-600
+  FAIL:        { label: "FAIL",        color: "rgb(229 30 30)" }, // rose-600
+  BLOCKED:     { label: "BLOCKED",     color: "#d97706" }, // amber-600
+  IN_PROGRESS: { label: "IN_PROGRESS", color: "#0284c7" }, // sky-600
+  SKIPPED:     { label: "SKIPPED",     color: "#64748b" }, // slate-500
+  NOT_RUN:     { label: "NOT_RUN",     color: "#71717a" }, // zinc-500
+  NOT_STARTED: { label: "NOT_STARTED", color: "#f59e0b" }, // amber-500
+} as const;
