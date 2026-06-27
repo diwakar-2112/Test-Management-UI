@@ -46,7 +46,7 @@ export class ProjectList implements OnInit {
   errorMessage=signal('');
 
   getProjects() {
-    this.commonService.getAllProjects(0, 10).subscribe({
+    this.commonService.getAllProjects(0, 0,true).subscribe({
       next: (res: ProjectListResponse) => {
         this.products.set(res.content);
         this.commonDataService.projectData = res.content;

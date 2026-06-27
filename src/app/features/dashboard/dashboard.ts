@@ -45,7 +45,7 @@ export class Dashboard implements OnInit {
     return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
   });
   goToProject() {
-    this.projectService.getAllProjects(0, 10).subscribe({
+    this.projectService.getAllProjects(0, 10,false).subscribe({
       next: (res => {
         console.log(res);
         this.userName.set(localStorage?.getItem('userName') ?? '');

@@ -8,6 +8,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/login/login/login').then(m => m.Login)
   },
   {
+    path: 'access-denied',
+    loadComponent:()=> import('./core/components/access-denied-page/access-denied-page').then(m=>m.AccessDeniedPage)
+  },
+  {
     path: '',
     component: MainLayoutComponent,
     canActivate: [authGuard],

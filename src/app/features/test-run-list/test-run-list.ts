@@ -106,7 +106,7 @@ export class TestRunList implements OnInit {
   }
 
   loadProjects() {
-    this.commonService.getAllProjects(0, 1000).subscribe({
+    this.commonService.getAllProjects(0, 0,true).subscribe({
       next: (res: any) => {
         if (res && res.content) {
           this.projects.set(res.content);

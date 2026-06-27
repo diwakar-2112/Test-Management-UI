@@ -57,7 +57,7 @@
 
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    @apply bg-background text-text-main antialiased transition-colors duration-300 overflow-x-hidden;
+    @apply bg-background text-text-main antialiased transition-colors  overflow-x-hidden;
   }
 }
 

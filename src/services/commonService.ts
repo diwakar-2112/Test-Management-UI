@@ -16,8 +16,8 @@ export interface LoginResponse {
 
 export class CommonService {
     private api = inject(ApiService);
-    getAllProjects(page: number, size: number): Observable<any> {
-        return this.api.regularGetRequest<any>('projects', { page, size });
+    getAllProjects(page: number, size: number,isAll:boolean): Observable<any> {
+        return this.api.regularGetRequest<any>('projects', { page, size,isAll });
     }
     getProjectById(id: any) {
         return this.api.regularGetRequest<any>(`projects/${id}`);

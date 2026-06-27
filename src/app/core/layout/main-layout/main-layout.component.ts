@@ -44,7 +44,7 @@ export class MainLayoutComponent implements OnInit {
         this.userName.set(localStorage?.getItem('userName') ?? 'Admin User');
 
         // Optional: If you really want project count in the header for all pages
-        this.projectService.getAllProjects(0, 10).subscribe({
+        this.projectService.getAllProjects(0, 10,false).subscribe({
             next: (res) => {
                 this.projectCount.set(res?.content?.length || 0);
             },
