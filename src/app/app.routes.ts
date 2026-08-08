@@ -46,6 +46,18 @@ export const routes: Routes = [
         loadComponent: () => import('./features/test-run-detail/test-run-detail').then(m => m.TestRunDetail)
       },
       {
+        path:'users',
+        loadComponent:()=> import('./features/administrations/users/users').then(m=>m.Users)
+      },
+      {
+        path:'roles',
+        loadComponent:()=>import('./features/administrations/roles/roles').then(m=>m.Roles)
+      },
+      {
+        path:'modules',
+        loadComponent:()=>import('./features/administrations/modules/modules').then(m=>m.Modules)
+      },
+      {
         path: 'dashboard',
         redirectTo: 'projects',
         pathMatch: 'full'

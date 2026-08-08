@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiService } from '../app/core/services/api.service';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { User } from '../app/core/model/model';
+import { User, UserPayload } from '../app/core/model/model';
+import { UserListResponse } from '../app/core/model/model';
 import { withSkipLoader } from '../app/core/interceptors/global-loader.interceptor';
 export interface LoginResponse {
     accessToken: string;
@@ -212,5 +213,28 @@ export class CommonService {
                 return throwError(()=>error)
             })
         )
+    }
+
+    getUserList(params?: any):Observable<UserListResponse>{
+        let url = `admin/users`;
+        return this.api.regularGetRequest<UserListResponse>(url, params).pipe(
+            tap((res)=>{
+                console.log('fetched users list');
+            }),
+            catchError((err)=>{
+                return throwError(()=>err)
+            })
+        )
+    }
+    createUser(body: UserPayload): Observable<any> {
+        let url = `admin/users`;
+        return this.api.post<UserPayload>(url,body).pipe(
+            tap((res)=>{
+                console.log('user created successfully');
+            }),
+            catchError((err)=>{
+                return throwError(()=>err)
+            })
+        )   
     }
 }

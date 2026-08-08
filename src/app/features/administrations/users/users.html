@@ -1,0 +1,306 @@
+<div class="">
+    <!-- Breadcrumb -->
+    <!-- <nav class="flex items-center gap-2 text-sm mb-8">
+        <span class="text-text-secondary font-medium s">Administration</span>
+        <svg class="w-3.5 h-3.5 text-text-secondary/50" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        <span class="text-text-main font-bold">Users</span>
+    </nav> -->
+
+    <!-- Header Section -->
+    <section class="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-text-main tracking-tight">Users Management</h1>
+            <p class="text-text-secondary text-sm mt-1">
+                Manage system users, roles, and access permissions.
+            </p>
+        </div>
+        <div class="flex items-center gap-3"(click)=openAddUser()>
+            <button
+                class="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/30 hover:bg-orange-600 hover:shadow-primary/40 hover:-translate-y-0.5 active:scale-95 ">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                Add New User
+            </button>
+        </div>
+    </section>
+
+    <!-- Filter Card -->
+    <section class="bg-surface border border-border rounded-2xl p-6 shadow-sm mb-6">
+        <form [formGroup]="filterForm" class="flex flex-col md:flex-row gap-6 w-full items-end">
+            <!-- Search -->
+            <!-- <div class="flex-1 w-full">
+                <label class="block text-[11px] font-bold text-text-secondary mb-2 uppercase tracking-widest pl-1">Search Users</label>
+                <div class="relative flex items-center bg-background border border-border rounded-xl px-4 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary h-11 ">
+                    <svg class="w-5 h-5 text-text-secondary mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                    <input formControlName="search" type="text" placeholder="Search by name, username, or email..."
+                        class="w-full bg-transparent text-sm font-medium text-text-main placeholder:text-text-secondary/60 outline-none border-none" />
+                </div>
+            </div> -->
+
+            <!-- Role Dropdown -->
+            <div class="w-full md:w-56">
+                <label class="block text-[11px] font-bold text-text-secondary mb-2 uppercase tracking-widest pl-1">Role</label>
+                <div class="h-11">
+                    <p-select formControlName="role" [options]="rolesOptions" optionLabel="label" optionValue="value"
+                        placeholder="All Roles" styleClass="w-full h-full custom-select bg-background border-border rounded-xl"></p-select>
+                </div>
+            </div>
+
+            <!-- Status Dropdown -->
+            <div class="w-full md:w-56">
+                <label class="block text-[11px] font-bold text-text-secondary mb-2 uppercase tracking-widest pl-1">Status</label>
+                <div class="h-11">
+                    <p-select formControlName="status" [options]="statusOptions" optionLabel="label" optionValue="value"
+                        placeholder="All Statuses" styleClass="w-full h-full custom-select bg-background border-border rounded-xl"></p-select>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <!-- Data Table Card -->
+    <section class="bg-surface border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col">
+
+        <!-- Scrollable wrapper: table stays a row-layout at all sizes, scrolls horizontally when too narrow -->
+        <div class="w-full overflow-x-auto">
+            <div class="min-w-[800px]">
+
+                <!-- Table Header -->
+                <div class="flex gap-4 px-6 py-5 border-b border-border bg-background/30 text-[11px] font-bold text-text-secondary uppercase tracking-widest w-full">
+                    <!-- <div class="flex-1">Name</div> -->
+                    <div class="flex-1">Username</div>
+                    <div class="flex-1">Email</div>
+                    <div class="flex-1">Role</div>
+                    <div class="flex-1">Status</div>
+                    <div class="flex-none w-16 text-right">Actions</div>
+                </div>
+
+                <!-- Table Rows -->
+                <div class="flex flex-col">
+                    @for (user of userList(); track user.id) {
+                    <div class="flex gap-4 px-6 py-4 border-b border-border/50 last:border-none hover:bg-surface-highlight/50 s items-center w-full">
+
+                        <!-- Name & Avatar -->
+                        <!-- <div class="flex-1 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border {{ user.avatarColor }}">
+                                {{ user.avatarInitials }}
+                            </div>
+                            <span class="text-sm font-bold text-text-main">{{ user.username }}</span>
+                        </div> -->
+
+                        <!-- Username -->
+                        <div class="flex-1">
+                            <span class="text-sm font-medium text-text-secondary">{{ user.username }}</span>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="flex-1">
+                            <span class="text-sm font-medium text-text-secondary">{{ user.email }}</span>
+                        </div>
+
+                        <!-- Role -->
+                        <div class="flex-1">
+                            <span class="px-3 py-1 rounded-full text-[11px] font-bold {{ getRoleBadgeClass(user.roleName) }}">
+                                {{ user.roleName }}
+                            </span>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="flex-1 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full" [ngClass]="user.status === 'Active' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-gray-500'"></span>
+                            <span class="text-xs font-medium text-text-secondary">{{ user.status }}</span>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex-none w-16 flex justify-end">
+                            <button class="p-2 rounded-lg text-text-secondary hover:text-text-main hover:bg-background s">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="5" r="2" />
+                                    <circle cx="12" cy="12" r="2" />
+                                    <circle cx="12" cy="19" r="2" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <app-pagination [currentPage]="currentPage()" [totalPages]="totalPages()" [totalElements]="totalElements()"
+            [pageSize]="pageSize()" itemLabel="runs" (pageChange)="onPageChange($event)">
+        </app-pagination>
+    </section>
+</div>
+
+<!-- Backdrop -->
+@if (isSlidePanelOpen()) {
+    <div class="fixed inset-0 bg-black/60 z-[100] backdrop-blur-sm transition-opacity" (click)="closePanel()"></div>
+}
+
+<div class="fixed inset-y-0 right-0 z-[101] w-full max-w-lg bg-surface border-l border-border shadow-2xl  flex flex-col"
+
+    [class.invisible]="!isSlidePanelOpen()">
+         <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-5 border-b border-border/50">
+        <h2 class="text-lg font-bold text-text-main">
+            {{ panelMode() === 'add' ? 'Add New User' : 'Edit User' }}
+        </h2>
+        <button (click)="closePanel()" class="p-2 -mr-2 rounded-full text-text-secondary hover:bg-background hover:text-text-main ">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+     <div class="flex flex-col items-center mt-6 mb-4">
+            <div class="w-20 h-20 rounded-full bg-background border-2 border-border overflow-hidden mb-3 flex items-center justify-center">
+                <!-- Placeholder Icon -->
+                <svg class="w-8 h-8 text-text-secondary/50" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
+            <button class="text-xs font-bold text-orange-400 hover:text-orange-300 transition-colors">Change Photo</button>
+        </div>
+
+    <!-- Scrollable Body -->
+    <div class="flex-1 overflow-y-auto p-6 scroll-smooth">
+        
+        <form [formGroup]="userForm" class="flex flex-col gap-6">
+            
+            <!-- Grid for Names -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">
+                        First Name <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" formControlName="firstName" class="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none  placeholder:text-text-secondary/50" placeholder="e.g. Sarah" />
+                    @if (userForm.get('firstName')?.hasError('required') && userForm.get('firstName')?.touched) {
+                        <span class="text-xs text-red-500">First name is required.</span>
+                    }
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">Middle Name</label>
+                    <input type="text" formControlName="middleName" class="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none  placeholder:text-text-secondary/50" placeholder="e.g. J" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">
+                        Last Name <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" formControlName="lastName" class="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none  placeholder:text-text-secondary/50" placeholder="e.g. Connor" />
+                    @if (userForm.get('lastName')?.hasError('required') && userForm.get('lastName')?.touched) {
+                        <span class="text-xs text-red-500">Last name is required.</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Username and Email -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">
+                        Username <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" formControlName="username" class="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none  placeholder:text-text-secondary/50" placeholder="e.g. sarah.connor" />
+                    @if (userForm.get('username')?.hasError('required') && userForm.get('username')?.touched) {
+                        <span class="text-xs text-red-500">Username is required.</span>
+                    }
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">
+                        Email Address <span class="text-red-500">*</span>
+                    </label>
+                    <input type="email" formControlName="email" class="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none  placeholder:text-text-secondary/50" placeholder="sarah.c@company.com" />
+                    @if (userForm.get('email')?.hasError('required') && userForm.get('email')?.touched) {
+                        <span class="text-xs text-red-500">Email is required.</span>
+                    }
+                    @if (userForm.get('email')?.hasError('email') && userForm.get('email')?.touched) {
+                        <span class="text-xs text-red-500">Please enter a valid email format.</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Mobile and Role -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">Mobile</label>
+                    <input type="text" formControlName="mobile" class="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none  placeholder:text-text-secondary/50" placeholder="+19876543210" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">
+                        Role <span class="text-red-500">*</span>
+                    </label>
+                    <select formControlName="roleId" class="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none  appearance-none cursor-pointer">
+                        <option value="1">SUPER_ADMIN</option>
+                        <option value="2">TESTER</option>
+                        <option value="3">QA_LEAD</option>
+                    </select>
+                    @if (userForm.get('roleId')?.hasError('required') && userForm.get('roleId')?.touched) {
+                        <span class="text-xs text-red-500">Role is required.</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Password & Confirm Password -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">
+                        {{ panelMode() === 'add' ? 'Password' : 'Reset Password' }} <span class="text-red-500" *ngIf="panelMode() === 'add'">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="password" formControlName="password" placeholder="••••••••" class="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none  placeholder:text-text-secondary/50" />
+                        <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-main">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                        </button>
+                    </div>
+                    @if (userForm.get('password')?.hasError('required') && userForm.get('password')?.touched) {
+                        <span class="text-xs text-red-500">Password is required.</span>
+                    }
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">
+                        Confirm Password <span class="text-red-500" *ngIf="panelMode() === 'add'">*</span>
+                    </label>
+                    <input type="password" formControlName="confirmPassword" placeholder="••••••••" 
+                        class="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none  placeholder:text-text-secondary/50"
+                        [class.password-mismatch]="userForm.hasError('passwordMismatch')" />
+                    
+                    @if (userForm.get('confirmPassword')?.hasError('required') && userForm.get('confirmPassword')?.touched) {
+                        <span class="text-xs text-red-500">Please confirm your password.</span>
+                    } @else if (userForm.hasError('passwordMismatch') && userForm.get('confirmPassword')?.touched) {
+                        <span class="text-xs text-red-500">Passwords do not match.</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Account Status Toggle -->
+            <div class="flex items-center justify-between mt-2 p-4 rounded-xl bg-background border border-border">
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-sm font-bold text-text-main">Active Status</span>
+                    <span class="text-[11px] text-text-secondary">Allow user to log in and access projects.</span>
+                </div>
+                
+                <label class="relative inline-flex items-center cursor-pointer ml-3">
+                    <input type="checkbox"  class="sr-only peer"[checked]="userForm.get('status')?.value === 'ACTIVE'"
+                    (change)="onStatusChange($event)">
+                    <div class="w-11 h-6 bg-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after: peer-checked:bg-orange-500"></div>
+                </label>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="p-6 border-t border-border/50 flex justify-end gap-3 bg-background/50 backdrop-blur-md">
+        <button (click)="closePanel()" class="px-5 py-2.5 rounded-xl border border-border text-sm font-bold text-text-secondary hover:bg-surface-highlight  active:scale-95">
+            Cancel
+        </button>
+        <button (click)="saveUser()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-purple-600 text-sm font-bold text-white hover:from-orange-600 hover:to-purple-700 shadow-lg shadow-orange-500/20  active:scale-95">
+            Save Changes
+        </button>
+    </div>
+</div>

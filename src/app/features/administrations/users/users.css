@@ -1,0 +1,25 @@
+.card{
+    background:#fff;
+    padding:1.25rem;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+:host ::ng-deep .p-datatable{
+    font-size:14px;
+}
+
+:host ::ng-deep .p-datatable thead th{
+    font-weight:600;
+}
+
+.text-center{
+    text-align:center;
+}
+
+
+
+
+.ng-invalid.ng-touched {
+    border-color: #ef4444 !important; /* Tailwind's red-500 */
+}

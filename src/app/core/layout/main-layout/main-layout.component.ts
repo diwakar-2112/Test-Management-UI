@@ -26,6 +26,7 @@ export class MainLayoutComponent implements OnInit {
     isMobileMenuOpen = signal(false);
     projectCount = signal(0);
     userName = signal('');
+    isAdminMenuOpen = signal(false);
 
     initials = computed(() => {
         const name = this.userName();
@@ -65,4 +66,9 @@ export class MainLayoutComponent implements OnInit {
     closeMobileMenu() {
         this.isMobileMenuOpen.set(false);
     }
+     
+
+    toggleAdminMenu() {
+        this.isAdminMenuOpen.update(v => !v);
+   }
 }

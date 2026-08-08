@@ -88,3 +88,34 @@ export const Status = {
   NOT_RUN:     { label: "NOT_RUN",     color: "#71717a" }, // zinc-500
   NOT_STARTED: { label: "NOT_STARTED", color: "#f59e0b" }, // amber-500
 } as const;
+
+
+
+export interface UserList {
+  id: number;
+  username: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  email: string;
+  mobile: string;
+  status: string;
+  roleId: number;
+  roleName: string;
+}
+export interface UserListResponse {
+    content: UserList[];
+    pageInfo: PageInfo;
+}
+export interface UserPayload{
+   username: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  email: string;
+  mobile: string;
+  password: string;
+  confirmPassword: string;
+  status: "ACTIVE" | "INACTIVE"; 
+  roleId: number;
+}
