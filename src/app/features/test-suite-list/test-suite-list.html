@@ -1,354 +1,530 @@
 <div class="animate-fade-in">
+  <!-- Breadcrumb -->
+  <nav class="flex items-center gap-2 text-sm mb-8">
+    <a
+      routerLink="/projects"
+      class="text-text-secondary hover:text-primary font-medium transition-colors flex items-center gap-1.5"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3 7h7v10H3zM14 7h7v6h-7zM14 15h7v2a2 2 0 0 1-2 2h-5z"
+        />
+      </svg>
+      Projects
+    </a>
+    <svg
+      class="w-3.5 h-3.5 text-text-secondary/50"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+    <a
+      (click)="navigateBack()"
+      class="text-text-secondary hover:text-primary font-medium transition-colors cursor-pointer"
+    >
+      Project
+    </a>
+    <svg
+      class="w-3.5 h-3.5 text-text-secondary/50"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+    <span class="text-text-main font-bold">Test Suites</span>
+  </nav>
 
-    <!-- Breadcrumb -->
-    <nav class="flex items-center gap-2 text-sm mb-8">
-        <a routerLink="/projects"
-            class="text-text-secondary hover:text-primary font-medium transition-colors  flex items-center gap-1.5">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3 7h7v10H3zM14 7h7v6h-7zM14 15h7v2a2 2 0 0 1-2 2h-5z" />
-            </svg>
-            Projects
-        </a>
-        <svg class="w-3.5 h-3.5 text-text-secondary/50" fill="none" stroke="currentColor" stroke-width="2"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-        <a (click)="navigateBack()"
-            class="text-text-secondary hover:text-primary font-medium transition-colors  cursor-pointer">
-            Project
-        </a>
-        <svg class="w-3.5 h-3.5 text-text-secondary/50" fill="none" stroke="currentColor" stroke-width="2"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-        <span class="text-text-main font-bold">Test Suites</span>
-    </nav>
-
-    <!-- Header -->
-    <section
-        class="relative bg-surface/90 border border-border rounded-3xl p-8 shadow-xl shadow-black/5 overflow-hidden mb-8">
-
-        <!-- Decoration -->
-        <div
+  <!-- Header -->
+  <section
+    class="relative bg-surface/90 border border-border rounded-3xl p-8 shadow-xl shadow-black/5 overflow-hidden mb-8"
+  >
+    <!-- Decoration -->
+    <!-- <div
             class="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none">
-        </div>
+        </div> -->
 
-        <div class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-5">
-            <div class="flex items-center gap-4">
-                <div
-                    class="h-14 w-14 rounded-2xl bg-gradient-to-br from-blue-500/15 to-surface border border-blue-500/10 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-bold text-text-main tracking-tight">Test Suites</h1>
-                    <p class="text-text-secondary text-sm mt-0.5">
-                        {{ totalElements() }} suite{{ totalElements() !== 1 ? 's' : '' }} found
-                    </p>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-                <!-- Export Excel Button -->
-                <button (click)="exportToExcel()" [disabled]="exporting()"
-                    class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30  hover:bg-emerald-600 hover:shadow-emerald-500/40 hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-y-0">
-                    @if (exporting()) {
-                    <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                        </circle>
-                        <path class="opacity-75" fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                        </path>
-                    </svg>
-                    Exporting...
-                    } @else {
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                    </svg>
-                    Export Suites
-                    }
-                </button>
-
-                <!-- New Test Suite Button -->
-                <button (click)="openCreateModal()"
-                    class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30  hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path d="M12 4v16m8-8H4" />
-                    </svg>
-                    New Test Suite
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Loading State -->
-    @if (loading()) {
-    <section class="space-y-4">
-        @for (i of [1, 2, 3, 4]; track i) {
-        <div class="bg-surface/90 border border-border rounded-2xl p-6 animate-pulse">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-surface-highlight"></div>
-                    <div class="space-y-2">
-                        <div class="h-5 w-48 bg-surface-highlight rounded-lg"></div>
-                        <div class="h-3 w-32 bg-surface-highlight rounded"></div>
-                    </div>
-                </div>
-                <div class="h-8 w-20 bg-surface-highlight rounded-lg"></div>
-            </div>
-        </div>
-        }
-    </section>
-    }
-
-    <!-- Test Suite List -->
-    @if (!loading() && testSuites().length > 0) {
-    <section class="bg-surface/90 border border-border rounded-3xl shadow-xl shadow-black/5 overflow-hidden">
-
-        <!-- Table Header -->
+    <div class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+      <div class="flex items-center gap-4">
         <div
-            class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-border bg-background/50 text-[11px] font-bold text-text-secondary uppercase tracking-widest">
-            <div class="col-span-1">#</div>
-            <div class="col-span-5">Suite Name</div>
-            <div class="col-span-3">Created</div>
-            <div class="col-span-2">Updated</div>
-            <div class="col-span-1 text-right">Actions</div>
+          class="h-14 w-14 rounded-2xl bg-gradient-to-br from-blue-500/15 to-surface border border-blue-500/10 flex items-center justify-center flex-shrink-0"
+        >
+          <svg
+            class="w-7 h-7 text-blue-500"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+            />
+          </svg>
         </div>
+        <div>
+          <h1 class="text-2xl font-bold text-text-main tracking-tight">Test Suites</h1>
+          <p class="text-text-secondary text-sm mt-0.5">
+            {{ totalElements() }} suite{{ totalElements() !== 1 ? 's' : '' }} found
+          </p>
+        </div>
+      </div>
 
-        <!-- Suite Rows -->
-        @for (suite of testSuites(); track suite.id; let idx = $index) {
-        <div (click)="navigateToTestCases(suite)"
-            class="group grid grid-cols-12 gap-4 px-6 py-5 border-b border-border/50 last:border-b-0 hover:bg-blue-500/[0.03] transition-colors  cursor-pointer items-center">
+      <div class="flex items-center gap-3">
+        <!-- Export Excel Button -->
+        <button
+          (click)="exportToExcel()"
+          [disabled]="exporting()"
+          class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 hover:bg-emerald-600 hover:shadow-emerald-500/40 hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-y-0"
+        >
+          @if (exporting()) {
+            <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            Exporting...
+          } @else {
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+              />
+            </svg>
+            Export Suites
+          }
+        </button>
 
-            <!-- Index -->
-            <div class="col-span-1">
-                <span
-                    class="text-xs font-bold text-text-secondary/50 bg-background px-2 py-1 rounded-lg border border-border/50">
-                    {{ (currentPage() * pageSize()) + idx + 1 }}
-                </span>
+        <!-- New Test Suite Button -->
+        <button
+          (click)="openCreateModal()"
+          class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 4v16m8-8H4" />
+          </svg>
+          New Test Suite
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <section class="space-y-4">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <div class="bg-surface/90 border border-border rounded-2xl p-6 animate-pulse">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-xl bg-surface-highlight"></div>
+              <div class="space-y-2">
+                <div class="h-5 w-48 bg-surface-highlight rounded-lg"></div>
+                <div class="h-3 w-32 bg-surface-highlight rounded"></div>
+              </div>
             </div>
+            <div class="h-8 w-20 bg-surface-highlight rounded-lg"></div>
+          </div>
+        </div>
+      }
+    </section>
+  }
 
-            <!-- Name -->
-            <div class="col-span-5 flex items-center gap-3">
-                <div
-                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/10 to-surface border border-blue-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform ">
-                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-sm font-bold text-text-main group-hover:text-blue-500 transition-colors">
-                        {{ suite.name }}
-                    </p>
-                    <!-- <p class="text-[10px] text-text-secondary font-medium mt-0.5">
+  <!-- Test Suite List -->
+  @if (!loading() && testSuites().length > 0) {
+    <section
+      class="bg-surface/90 border border-border rounded-3xl shadow-xl shadow-black/5 overflow-hidden"
+    >
+      <!-- Table Header -->
+      <div
+        class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-border bg-background/50 text-[11px] font-bold text-text-secondary uppercase tracking-widest"
+      >
+        <div class="col-span-1">#</div>
+        <div class="col-span-5">Suite Name</div>
+        <div class="col-span-3">Created</div>
+        <div class="col-span-2">Updated</div>
+        <div class="col-span-1 text-right">Actions</div>
+      </div>
+
+      <!-- Suite Rows -->
+      @for (suite of testSuites(); track suite.id; let idx = $index) {
+        <div
+          (click)="navigateToTestCases(suite)"
+          class="group grid grid-cols-12 gap-4 px-6 py-5 border-b border-border/50 last:border-b-0 hover:bg-blue-500/[0.03] transition-colors cursor-pointer items-center"
+        >
+          <!-- Index -->
+          <div class="col-span-1">
+            <span
+              class="text-xs font-bold text-text-secondary/50 bg-background px-2 py-1 rounded-lg border border-border/50"
+            >
+              {{ currentPage() * pageSize() + idx + 1 }}
+            </span>
+          </div>
+
+          <!-- Name -->
+          <div class="col-span-5 flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/10 to-surface border border-blue-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+            >
+              <svg
+                class="w-5 h-5 text-blue-500"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+                />
+              </svg>
+            </div>
+            <div>
+              <p
+                class="text-sm font-bold text-text-main group-hover:text-blue-500 transition-colors"
+              >
+                {{ suite.name }}
+              </p>
+              <!-- <p class="text-[10px] text-text-secondary font-medium mt-0.5">
                         ID: {{ suite.id }}
                     </p> -->
-                </div>
             </div>
+          </div>
 
-            <!-- Created -->
-            <div class="col-span-3">
-                <p class="text-xs font-medium text-text-main">{{ formatDate(suite.createdAt) }}</p>
-                <p class="text-[10px] text-text-secondary mt-0.5">{{ formatTime(suite.createdAt) }}</p>
-            </div>
+          <!-- Created -->
+          <div class="col-span-3">
+            <p class="text-xs font-medium text-text-main">{{ formatDate(suite.createdAt) }}</p>
+            <p class="text-[10px] text-text-secondary mt-0.5">{{ formatTime(suite.createdAt) }}</p>
+          </div>
 
-            <!-- Updated -->
-            <div class="col-span-2">
-                <p class="text-xs font-medium text-text-main">{{ formatDate(suite.updatedAt) }}</p>
-                <p class="text-[10px] text-text-secondary mt-0.5">{{ formatTime(suite.updatedAt) }}</p>
-            </div>
+          <!-- Updated -->
+          <div class="col-span-2">
+            <p class="text-xs font-medium text-text-main">{{ formatDate(suite.updatedAt) }}</p>
+            <p class="text-[10px] text-text-secondary mt-0.5">{{ formatTime(suite.updatedAt) }}</p>
+          </div>
 
-            <!-- Actions -->
-            <div class="col-span-1 flex justify-end gap-1">
-                <button (click)="$event.stopPropagation(); navigateToTestCases(suite)"
-                    class="p-2 rounded-lg text-text-secondary hover:text-blue-500 hover:bg-blue-500/10    active:scale-90">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                </button>
-                <button (click)="$event.stopPropagation(); confirmDelete(suite)"
-                    class="p-2 rounded-lg text-text-secondary hover:text-red-500 hover:bg-red-500/10    active:scale-90">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-        }
-
-        <!-- Pagination -->
-        @if (totalPages() > 1) {
-        <div class="flex items-center justify-between px-6 py-4 border-t border-border bg-background/30">
-
-            <!-- Info -->
-            <p class="text-xs text-text-secondary font-medium">
-                Showing
-                <span class="font-bold text-text-main">{{ currentPage() * pageSize() + 1 }}</span>
-                –
-                <span class="font-bold text-text-main">{{
-                    (currentPage() + 1) * pageSize() > totalElements()
-                    ? totalElements()
-                    : (currentPage() + 1) * pageSize()
-                    }}</span>
-                of
-                <span class="font-bold text-text-main">{{ totalElements() }}</span>
-                suites
-            </p>
-
-            <!-- Page Controls -->
-            <div class="flex items-center gap-1">
-
-                <!-- Prev -->
-                <button (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 0"
-                    class="p-2 rounded-xl text-text-secondary hover:text-text-main hover:bg-surface  disabled:opacity-30 disabled:cursor-not-allowed active:scale-90">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-
-                <!-- Page Numbers -->
-                @for (page of pages(); track $index) {
-                @if (page === -1) {
-                <span class="w-9 h-9 flex items-center justify-center text-xs text-text-secondary">…</span>
-                } @else {
-                <button (click)="goToPage(page)"
-                    [class]="page === currentPage()
-                            ? 'w-9 h-9 rounded-xl bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/30 '
-                            : 'w-9 h-9 rounded-xl text-text-secondary text-xs font-bold hover:bg-surface hover:text-text-main  active:scale-90'">
-                    {{ page + 1 }}
-                </button>
-                }
-                }
-
-                <!-- Next -->
-                <button (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() >= totalPages() - 1"
-                    class="p-2 rounded-xl text-text-secondary hover:text-text-main hover:bg-surface  disabled:opacity-30 disabled:cursor-not-allowed active:scale-90">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-        }
-    </section>
-    }
-
-    <!-- Empty State -->
-    @if (!loading() && testSuites().length === 0) {
-    <section class="bg-surface/90 border border-border rounded-3xl shadow-xl shadow-black/5 overflow-hidden">
-        <div class="flex flex-col items-center justify-center py-20 text-center">
-            <div
-                class="w-24 h-24 bg-background rounded-full flex items-center justify-center mb-6 shadow-xl shadow-black/5 border border-border">
-                <svg class="w-10 h-10 text-text-secondary/40" fill="none" stroke="currentColor" stroke-width="1.5"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                </svg>
-            </div>
-            <h3 class="text-xl font-bold text-text-main mb-2">No Test Suites Yet</h3>
-            <p class="text-text-secondary max-w-sm mb-8">
-                Create your first test suite to begin organizing your test cases into logical groups.
-            </p>
+          <!-- Actions -->
+          <div class="col-span-1 flex justify-end gap-1">
             <button
-                class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/30  hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-1 active:scale-95">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path d="M12 4v16m8-8H4" />
-                </svg>
-                Create First Test Suite
+              (click)="$event.stopPropagation(); navigateToTestCases(suite)"
+              class="p-2 rounded-lg text-text-secondary hover:text-blue-500 hover:bg-blue-500/10 active:scale-90"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
             </button>
+            <button
+              (click)="$event.stopPropagation(); confirmDelete(suite)"
+              class="p-2 rounded-lg text-text-secondary hover:text-red-500 hover:bg-red-500/10 active:scale-90"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
+      }
+
+      <!-- Pagination -->
+      @if (totalPages() > 1) {
+        <div
+          class="flex items-center justify-between px-6 py-4 border-t border-border bg-background/30"
+        >
+          <!-- Info -->
+          <p class="text-xs text-text-secondary font-medium">
+            Showing
+            <span class="font-bold text-text-main">{{ currentPage() * pageSize() + 1 }}</span>
+            –
+            <span class="font-bold text-text-main">{{
+              (currentPage() + 1) * pageSize() > totalElements()
+                ? totalElements()
+                : (currentPage() + 1) * pageSize()
+            }}</span>
+            of
+            <span class="font-bold text-text-main">{{ totalElements() }}</span>
+            suites
+          </p>
+
+          <!-- Page Controls -->
+          <div class="flex items-center gap-1">
+            <!-- Prev -->
+            <button
+              (click)="goToPage(currentPage() - 1)"
+              [disabled]="currentPage() === 0"
+              class="p-2 rounded-xl text-text-secondary hover:text-text-main hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed active:scale-90"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <!-- Page Numbers -->
+            @for (page of pages(); track $index) {
+              @if (page === -1) {
+                <span class="w-9 h-9 flex items-center justify-center text-xs text-text-secondary"
+                  >…</span
+                >
+              } @else {
+                <button
+                  (click)="goToPage(page)"
+                  [class]="
+                    page === currentPage()
+                      ? 'w-9 h-9 rounded-xl bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/30 '
+                      : 'w-9 h-9 rounded-xl text-text-secondary text-xs font-bold hover:bg-surface hover:text-text-main  active:scale-90'
+                  "
+                >
+                  {{ page + 1 }}
+                </button>
+              }
+            }
+
+            <!-- Next -->
+            <button
+              (click)="goToPage(currentPage() + 1)"
+              [disabled]="currentPage() >= totalPages() - 1"
+              class="p-2 rounded-xl text-text-secondary hover:text-text-main hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed active:scale-90"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      }
     </section>
-    }
+  }
+
+  <!-- Empty State -->
+  @if (!loading() && testSuites().length === 0) {
+    <section
+      class="bg-surface/90 border border-border rounded-3xl shadow-xl shadow-black/5 overflow-hidden"
+    >
+      <div class="flex flex-col items-center justify-center py-20 text-center">
+        <div
+          class="w-24 h-24 bg-background rounded-full flex items-center justify-center mb-6 shadow-xl shadow-black/5 border border-border"
+        >
+          <svg
+            class="w-10 h-10 text-text-secondary/40"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+            />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-text-main mb-2">No Test Suites Yet</h3>
+        <p class="text-text-secondary max-w-sm mb-8">
+          Create your first test suite to begin organizing your test cases into logical groups.
+        </p>
+        <button
+          class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-1 active:scale-95"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 4v16m8-8H4" />
+          </svg>
+          Create First Test Suite
+        </button>
+      </div>
+    </section>
+  }
 </div>
 
 <!-- Toast -->
 <div class="card flex justify-center gap-2">
-    <p-toast styleClass="center-toast" />
+  <p-toast styleClass="center-toast" />
 </div>
 
 <!-- Delete Confirmation Modal -->
 <ng-template #deleteConfirmModal>
-    <div class="flex flex-col items-center gap-6 p-6">
-        <!-- Icon -->
-        <div class="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-            <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-            </svg>
-        </div>
-
-        <!-- Text -->
-        <div class="text-center">
-            <h3 class="text-lg font-bold  mb-1">Delete Test Suite?</h3>
-            <p class="text-sm text-text-secondary">
-                Are you sure you want to delete
-                <span class="font-semibold ">"{{ suiteToDelete()?.name }}"</span>?
-                This action cannot be undone.
-            </p>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex items-center gap-3 w-full">
-            <button (click)="cancelDelete()"
-                class="flex-1 px-5 py-2.5 rounded-xl border border-border text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main  active:scale-95">
-                No, Cancel
-            </button>
-            <button (click)="onDeleteConfirmed()"
-                class="flex-1 px-5 py-2.5 rounded-xl bg-red-500 text-sm font-bold text-white shadow-lg shadow-red-500/30 hover:bg-red-600 hover:shadow-red-500/40  active:scale-95">
-                Yes, Delete
-            </button>
-        </div>
+  <div class="flex flex-col items-center gap-6 p-6">
+    <!-- Icon -->
+    <div
+      class="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center"
+    >
+      <svg
+        class="w-8 h-8 text-red-500"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+        />
+      </svg>
     </div>
+
+    <!-- Text -->
+    <div class="text-center">
+      <h3 class="text-lg font-bold mb-1">Delete Test Suite?</h3>
+      <p class="text-sm text-text-secondary">
+        Are you sure you want to delete
+        <span class="font-semibold">"{{ suiteToDelete()?.name }}"</span>? This action cannot be
+        undone.
+      </p>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-3 w-full">
+      <button
+        (click)="cancelDelete()"
+        class="flex-1 px-5 py-2.5 rounded-xl border border-border text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main active:scale-95"
+      >
+        No, Cancel
+      </button>
+      <button
+        (click)="onDeleteConfirmed()"
+        class="flex-1 px-5 py-2.5 rounded-xl bg-red-500 text-sm font-bold text-white shadow-lg shadow-red-500/30 hover:bg-red-600 hover:shadow-red-500/40 active:scale-95"
+      >
+        Yes, Delete
+      </button>
+    </div>
+  </div>
 </ng-template>
 
 <!-- Create Test Suite Modal -->
 <ng-template #createSuiteModal>
-    <form [formGroup]="createSuiteForm" (ngSubmit)="onCreateSuite()" class="flex flex-col gap-6 p-6">
-        <!-- Icon -->
-        <div class="flex flex-col items-center gap-3">
-            <div
-                class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-                <svg class="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" stroke-width="1.5"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                </svg>
-            </div>
-            <p class="text-sm text-text-secondary text-center">Give your test suite a descriptive name.</p>
-        </div>
+  <form [formGroup]="createSuiteForm" (ngSubmit)="onCreateSuite()" class="flex flex-col gap-6 p-6">
+    <!-- Icon -->
+    <div class="flex flex-col items-center gap-3">
+      <div
+        class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center"
+      >
+        <svg
+          class="w-7 h-7 text-blue-500"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+          />
+        </svg>
+      </div>
+      <p class="text-sm text-text-secondary text-center">
+        Give your test suite a descriptive name.
+      </p>
+    </div>
 
-        <!-- Name Field -->
-        <div class="flex flex-col gap-2">
-            <label for="suiteName" class="text-xs font-bold text-text-secondary uppercase tracking-wider">Suite
-                Name</label>
-            <input pInputText id="suiteName" formControlName="name" type="text" placeholder="e.g. Login Flow Tests"
-                class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium text-text-main placeholder:text-text-secondary/50 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10  shadow-sm group-hover:border-primary/30" />
-            @if (createSuiteForm.get('name')?.touched && createSuiteForm.get('name')?.hasError('required')) {
-            <p class="text-xs text-red-400 font-medium">Suite name is required.</p>
-            }
-        </div>
-        
+    <!-- Name Field -->
+    <div class="flex flex-col gap-2">
+      <label for="suiteName" class="text-xs font-bold text-text-secondary uppercase tracking-wider"
+        >Suite Name</label
+      >
+      <input
+        pInputText
+        id="suiteName"
+        formControlName="name"
+        type="text"
+        placeholder="e.g. Login Flow Tests"
+        class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium text-text-main placeholder:text-text-secondary/50 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm group-hover:border-primary/30"
+      />
+      @if (
+        createSuiteForm.get('name')?.touched && createSuiteForm.get('name')?.hasError('required')
+      ) {
+        <p class="text-xs text-red-400 font-medium">Suite name is required.</p>
+      }
+    </div>
 
-        <!-- Actions -->
-        <div class="flex items-center gap-3">
-            <button type="button" (click)="cancelCreate()"
-                class="flex-1 px-5 py-2.5 rounded-xl border border-border text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main  active:scale-95">
-                Cancel
-            </button>
-            <button type="submit" [disabled]="createSuiteForm.invalid"
-                class="flex-1 px-5 py-2.5 rounded-xl bg-blue-500 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:shadow-blue-500/40  active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
-                Create Suite
-            </button>
-        </div>
-    </form>
+    <!-- Actions -->
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        (click)="cancelCreate()"
+        class="flex-1 px-5 py-2.5 rounded-xl border border-border text-sm font-bold text-text-secondary hover:bg-surface hover:text-text-main active:scale-95"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="createSuiteForm.invalid"
+        class="flex-1 px-5 py-2.5 rounded-xl bg-blue-500 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:shadow-blue-500/40 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+      >
+        Create Suite
+      </button>
+    </div>
+  </form>
 </ng-template>

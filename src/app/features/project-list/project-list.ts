@@ -1,4 +1,12 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, Signal, signal, TemplateRef } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  OnInit,
+  Signal,
+  signal,
+  TemplateRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CommonService } from '../../../services/commonService';
 import { Project, ProjectListResponse } from '../../core/model/model';
@@ -17,18 +25,25 @@ import { RippleModule } from 'primeng/ripple';
   selector: 'app-project-list',
   standalone: true,
   imports: [
-    CommonModule, TooltipModule, ReactiveFormsModule, ButtonModule, InputTextModule, TextareaModule,ToastModule,RippleModule
+    CommonModule,
+    TooltipModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    InputTextModule,
+    TextareaModule,
+    ToastModule,
+    RippleModule,
   ],
   templateUrl: './project-list.html',
   styleUrl: './project-list.css',
-  providers:[MessageService],
+  providers: [MessageService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectList implements OnInit {
   ngOnInit(): void {
     this.getProjects();
   }
-   private messageService = inject(MessageService);
+  private messageService = inject(MessageService);
   commonService = inject(CommonService);
   commonDataService = inject(CommonDataService);
   modalService = inject(ModalService);
@@ -38,53 +53,61 @@ export class ProjectList implements OnInit {
 
   projectForm = this.fb.group({
     name: ['', [Validators.required]],
-    description: ['', [Validators.required]]
+    description: ['', [Validators.required]],
   });
   showError() {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: this.errorMessage(),sticky: false  });
-    }
-  errorMessage=signal('');
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: this.errorMessage(),
+      sticky: false,
+    });
+  }
+  errorMessage = signal('');
 
   getProjects() {
-    this.commonService.getAllProjects(0, 0,true).subscribe({
+    this.commonService.getAllProjects(0, 0, true).subscribe({
       next: (res: ProjectListResponse) => {
         this.products.set(res.content);
         this.commonDataService.projectData = res.content;
-
-      }
-    })
+      },
+      error: (err) => {
+        console.log(err.error.message);
+        this.errorMessage.set(err.error.message);
+        this.showError();
+      },
+    });
   }
 
   openNewProject(template: TemplateRef<any>) {
-    this.modalService.open(template, {
-      header: 'Create New Project',
-      width: '30rem'
-    }).onClose.subscribe((result) => {
-      if (result) {
-        console.log('Got result', result);
-      }
-      this.projectForm.reset();
-    });
+    this.modalService
+      .open(template, {
+        header: 'Create New Project',
+        width: '30rem',
+      })
+      .onClose.subscribe((result) => {
+        if (result) {
+          console.log('Got result', result);
+        }
+        this.projectForm.reset();
+      });
   }
 
   onSubmit() {
     if (this.projectForm.valid) {
       let body = {};
       body = {
-        "name": this.projectForm.controls.name.value,
-        "description": this.projectForm.controls.description.value
-      }
+        name: this.projectForm.controls.name.value,
+        description: this.projectForm.controls.description.value,
+      };
       this.commonService.createProject(body).subscribe({
         next: (res) => {
           if (res) {
             this.getProjects();
           }
-
         },
-        error: (error) => {
-
-        }
-      })
+        error: (error) => {},
+      });
       this.modalService.close(this.projectForm.value);
     }
   }
@@ -101,11 +124,9 @@ export class ProjectList implements OnInit {
       },
       error: (err) => {
         console.log(err.error.message);
-        this.errorMessage.set(err.error.message)
+        this.errorMessage.set(err.error.message);
         this.showError();
-      }
-    })
-    
+      },
+    });
   }
 }
-
