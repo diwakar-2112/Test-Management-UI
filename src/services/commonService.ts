@@ -1,9 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiService } from '../app/core/services/api.service';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { User, UserPayload } from '../app/core/model/model';
+import {
+  ModuleRequest,
+  ModuleResponse,
+  RoleAccess,
+  RoleAccessPayload,
+  RoleAccessResponse,
+  User,
+  UserPayload,
+} from '../app/core/model/model';
 import { UserListResponse } from '../app/core/model/model';
-import { withSkipLoader } from '../app/core/interceptors/global-loader.interceptor';
 export interface LoginResponse {
   accessToken: string;
   tokenType: string;
@@ -235,6 +242,72 @@ export class CommonService {
     return this.api.put<any>(url, body).pipe(
       tap((res) => {
         console.log('user updated successfully');
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+  getModules(): Observable<ModuleResponse[]> {
+    let url = `admin/modules`;
+    return this.api.regularGetRequest<ModuleResponse[]>(url).pipe(
+      tap((res) => {
+        console.log('fetched modules list');
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+  createModule(body: ModuleRequest): Observable<ModuleRequest> {
+    let url = `admin/modules`;
+    return this.api.post<ModuleRequest>(url, body).pipe(
+      tap((res) => {
+        console.log('module created successfully');
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+  getRoles() {
+    let url = `admin/roles`;
+    return this.api.regularGetRequest<RoleAccessResponse>(url).pipe(
+      tap((res) => {
+        console.log('fetched roles list');
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+  getRoleById(id?: number) {
+    let url = `admin/roles/${id}`;
+    return this.api.regularGetRequest<any>(url).pipe(
+      tap((res) => {
+        console.log('fetched roles list');
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+  createRole(body: RoleAccessPayload) {
+    let url = `admin/roles`;
+    return this.api.post<RoleAccessResponse>(url, body).pipe(
+      tap((res) => {
+        console.log('created roles');
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+  updateRole(body: RoleAccessPayload, id: number) {
+    let url = `admin/roles/${id}`;
+    return this.api.put(url, body).pipe(
+      tap((res) => {
+        console.log('role updated');
       }),
       catchError((err) => {
         return throwError(() => err);
