@@ -151,3 +151,5 @@ export interface RoleAccess extends RoleAccessPayload {
 }
 
 export type RoleAccessResponse = RoleAccess[];
+
+export type AuthPermissions = [];

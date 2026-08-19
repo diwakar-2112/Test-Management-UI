@@ -1,74 +1,88 @@
-import { Component, computed, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ThemeService } from '../../../../services/theme.service';
 import { CommonService } from '../../../../services/commonService';
+import { AuthPermissions } from '../../model/model';
 
 @Component({
-    selector: 'app-main-layout',
-    standalone: true,
-    imports: [
-        CommonModule,
-        RouterOutlet,
-        RouterLink,
-        RouterLinkActive,
-        MatIconModule
-    ],
-    templateUrl: './main-layout.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-main-layout',
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatIconModule],
+  templateUrl: './main-layout.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainLayoutComponent implements OnInit {
-    private projectService = inject(CommonService);
-    themeService = inject(ThemeService);
+  private projectService = inject(CommonService);
+  themeService = inject(ThemeService);
+  commonService = inject(CommonService);
 
-    // Mobile Sidebar State
-    isMobileMenuOpen = signal(false);
-    projectCount = signal(0);
-    userName = signal('');
-    isAdminMenuOpen = signal(false);
+  // Mobile Sidebar State
+  isMobileMenuOpen = signal(false);
+  projectCount = signal(0);
+  userName = signal('');
+  isAdminMenuOpen = signal(false);
 
-    initials = computed(() => {
-        const name = this.userName();
-        if (!name) return '';
-        const parts = name.split(' ');
-        return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
+  initials = computed(() => {
+    const name = this.userName();
+    if (!name) return '';
+    const parts = name.split(' ');
+    return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
+  });
+
+  ngOnInit(): void {
+    // We can keep fetching project count for the header if needed
+    // Ideally this should come from a store or a shared signal, but this works for now
+    this.fetchUserInfo();
+    this.fetchUserPermissions();
+  }
+
+  fetchUserInfo() {
+    this.userName.set(localStorage?.getItem('userName') ?? 'Admin User');
+
+    // Optional: If you really want project count in the header for all pages
+    this.projectService.getAllProjects(0, 10, false).subscribe({
+      next: (res) => {
+        this.projectCount.set(res?.content?.length || 0);
+      },
+      error: () => {
+        // Handle error silently for layout
+      },
     });
+  }
+  fetchUserPermissions() {
+    this.commonService.getAuthPermissions().subscribe({
+      next: (res: AuthPermissions) => {
+        // if(!localStorage.getItem('acl')){
+        // localStorage.setItem('acl',JSON.stringify(res));
+        // console.log('res',res);
 
-    ngOnInit(): void {
-        // We can keep fetching project count for the header if needed
-        // Ideally this should come from a store or a shared signal, but this works for now
-        this.fetchUserInfo();
-    }
+        this.commonService.setPermissions(res);
+        // }
+      },
+    });
+  }
+  toggleTheme() {
+    this.themeService.toggleTheme();
+  }
 
-    fetchUserInfo() {
-        this.userName.set(localStorage?.getItem('userName') ?? 'Admin User');
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.update((v) => !v);
+  }
 
-        // Optional: If you really want project count in the header for all pages
-        this.projectService.getAllProjects(0, 10,false).subscribe({
-            next: (res) => {
-                this.projectCount.set(res?.content?.length || 0);
-            },
-            error: () => {
-                // Handle error silently for layout
-            }
-        });
-    }
+  closeMobileMenu() {
+    this.isMobileMenuOpen.set(false);
+  }
 
-    toggleTheme() {
-        this.themeService.toggleTheme();
-    }
-
-    toggleMobileMenu() {
-        this.isMobileMenuOpen.update(v => !v);
-    }
-
-    closeMobileMenu() {
-        this.isMobileMenuOpen.set(false);
-    }
-     
-
-    toggleAdminMenu() {
-        this.isAdminMenuOpen.update(v => !v);
-   }
+  toggleAdminMenu() {
+    this.isAdminMenuOpen.update((v) => !v);
+  }
 }

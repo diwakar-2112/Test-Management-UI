@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { ApiService } from '../app/core/services/api.service';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import {
+  AuthPermissions,
   ModuleRequest,
   ModuleResponse,
   RoleAccess,
@@ -22,6 +23,22 @@ export interface LoginResponse {
 })
 export class CommonService {
   private api = inject(ApiService);
+  private permissions: string[] = [];
+  setPermissions(permissions: string[]) {
+    console.log(permissions, 'setpermis');
+    this.permissions = permissions;
+  }
+  hasPermission(permission: string): boolean {
+    console.log(permission, 'this is permi');
+    console.log(this.permissions, 'this is permilist');
+    return this.permissions.includes(permission);
+  }
+  hasAnyPermission(permissions: string[]): boolean {
+    return permissions.some((permission) => this.permissions.includes(permission));
+  }
+  hasAllPermissions(permissions: string[]): boolean {
+    return permissions.every((permission) => this.permissions.includes(permission));
+  }
   getAllProjects(page: number, size: number, isAll: boolean): Observable<any> {
     return this.api.regularGetRequest<any>('projects', { page, size, isAll });
   }
@@ -308,6 +325,17 @@ export class CommonService {
     return this.api.put(url, body).pipe(
       tap((res) => {
         console.log('role updated');
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+  getAuthPermissions(): Observable<AuthPermissions> {
+    let url = `auth/permissions`;
+    return this.api.regularGetRequest<AuthPermissions>(url).pipe(
+      tap((res) => {
+        console.log('auth permission roles');
       }),
       catchError((err) => {
         return throwError(() => err);

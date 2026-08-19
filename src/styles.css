@@ -146,3 +146,60 @@
 .p-toast-message-text {
   display: inline !important;
 }
+
+.info-modal-dialog.p-dialog {
+  border: 1px solid rgba(var(--border) / 0.9);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: rgb(var(--surface));
+  color: rgb(var(--text-main));
+  box-shadow: 0 24px 80px rgba(0 0 0 / 0.35);
+}
+
+.info-modal-dialog .p-dialog-header,
+.info-modal-dialog .p-dialog-content {
+  background: rgb(var(--surface));
+  color: rgb(var(--text-main));
+}
+
+.info-modal-dialog .p-dialog-header {
+  padding: 1.25rem 1.5rem 0.25rem;
+  border-bottom: 0;
+}
+
+.info-modal-dialog .p-dialog-title {
+  color: rgb(var(--text-secondary));
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.info-modal-dialog .p-dialog-content {
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.info-modal-dialog .p-dialog-header-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  color: rgb(var(--text-secondary));
+}
+
+.info-modal-dialog .p-dialog-header-icon:hover {
+  background: rgba(var(--surface-highlight) / 0.8);
+  color: rgb(var(--text-main));
+}
+
+.info-modal-dialog .info-modal__button.p-button {
+  border: 0;
+  border-radius: 0.85rem;
+  background: rgb(var(--primary));
+  color: rgb(var(--primary-fg));
+  font-weight: 800;
+  box-shadow: 0 14px 28px rgba(var(--primary) / 0.24);
+}
+
+.info-modal-dialog .info-modal__button.p-button:hover {
+  filter: brightness(1.05);
+}

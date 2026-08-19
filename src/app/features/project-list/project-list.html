@@ -77,18 +77,27 @@
 <section class="mt-8">
   <div class="flex items-center justify-between mb-6 px-1">
     <h3 class="text-lg font-bold text-text-main">All Projects</h3>
-    <button
-      [pTooltip]="tooltipContent"
-      severity="secondary"
-      tooltipPosition="bottom"
-      (click)="openNewProject(createProjectModal)"
-      class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/30 hover:bg-orange-600 hover:shadow-orange-500/40 hover:-translate-y-1 active:scale-95"
-    >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <path d="M12 4v16m8-8H4" />
-      </svg>
-      New Project
-    </button>
+    @if (commonService.hasPermission('PROJECT_CREATE')) {
+      <button
+        [pTooltip]="tooltipContent"
+        severity="secondary"
+        tooltipPosition="bottom"
+        (click)="openNewProject(createProjectModal)"
+        class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/30 hover:bg-orange-600 hover:shadow-orange-500/40 hover:-translate-y-1 active:scale-95"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          viewBox="0 0 24 24"
+        >
+          <path d="M12 4v16m8-8H4" />
+        </svg>
+        New Project
+      </button>
+    }
+
     <ng-template #tooltipContent>
       <div class="flex items-center">
         <span> <b>Create Project</b> </span>

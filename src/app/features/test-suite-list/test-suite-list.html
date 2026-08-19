@@ -120,21 +120,23 @@
         </button>
 
         <!-- New Test Suite Button -->
-        <button
-          (click)="openCreateModal()"
-          class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            viewBox="0 0 24 24"
+        @if (commonService.hasPermission('TESTSUITE_CREATE')) {
+          <button
+            (click)="openCreateModal()"
+            class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95"
           >
-            <path d="M12 4v16m8-8H4" />
-          </svg>
-          New Test Suite
-        </button>
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 4v16m8-8H4" />
+            </svg>
+            New Test Suite
+          </button>
+        }
       </div>
     </div>
   </section>
@@ -388,20 +390,22 @@
         <p class="text-text-secondary max-w-sm mb-8">
           Create your first test suite to begin organizing your test cases into logical groups.
         </p>
-        <button
-          class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-1 active:scale-95"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            viewBox="0 0 24 24"
+        @if (commonService.hasPermission('TESTSUITE_CREATE')) {
+          <button
+            class="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:shadow-blue-500/40 hover:-translate-y-1 active:scale-95"
           >
-            <path d="M12 4v16m8-8H4" />
-          </svg>
-          Create First Test Suite
-        </button>
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 4v16m8-8H4" />
+            </svg>
+            Create First Test Suite
+          </button>
+        }
       </div>
     </section>
   }

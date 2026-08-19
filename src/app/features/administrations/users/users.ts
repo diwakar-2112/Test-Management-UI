@@ -126,7 +126,7 @@ export class Users implements OnInit {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
       status: ['ACTIVE'],
-      roleId: [2, Validators.required],
+      roleId: [3, Validators.required],
     },
     { validators: this.passwordMatchValidator },
   );
@@ -167,7 +167,7 @@ export class Users implements OnInit {
 
     this.userForm.get('password')?.updateValueAndValidity();
     this.userForm.get('confirmPassword')?.updateValueAndValidity();
-    this.userForm.reset({ status: 'ACTIVE', roleId: 2 });
+    this.userForm.reset({ status: 'ACTIVE', roleId: 3 });
     this.isSlidePanelOpen.set(true);
   }
   saveUser() {
@@ -189,8 +189,8 @@ export class Users implements OnInit {
       },
       error: (err) => {
         console.log('error creating user', err);
-        this.errorMessage.set(err.error.message);
-        this.showError();
+        // this.errorMessage.set(err.error.message);
+        // this.showError();
       },
     });
   }
@@ -202,7 +202,7 @@ export class Users implements OnInit {
       email: this.userForm.value.email,
       mobile: this.userForm.value.mobile,
       status: this.userForm.getRawValue().status,
-      roleId: this.userForm.value.roleId,
+      roleId: 3,
     };
 
     this.commonService.updateUser(this.selectedUserId!, body).subscribe({
