@@ -126,7 +126,7 @@ export class Users implements OnInit {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
       status: ['ACTIVE'],
-      roleId: [3, Validators.required],
+      roleId: [2, Validators.required],
     },
     { validators: this.passwordMatchValidator },
   );
