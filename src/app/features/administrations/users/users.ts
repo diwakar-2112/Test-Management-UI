@@ -167,7 +167,7 @@ export class Users implements OnInit {
 
     this.userForm.get('password')?.updateValueAndValidity();
     this.userForm.get('confirmPassword')?.updateValueAndValidity();
-    this.userForm.reset({ status: 'ACTIVE', roleId: 3 });
+    this.userForm.reset({ status: 'ACTIVE', roleId: 2 });
     this.isSlidePanelOpen.set(true);
   }
   saveUser() {
