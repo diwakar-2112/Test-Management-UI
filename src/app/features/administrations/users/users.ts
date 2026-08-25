@@ -202,7 +202,7 @@ export class Users implements OnInit {
       email: this.userForm.value.email,
       mobile: this.userForm.value.mobile,
       status: this.userForm.getRawValue().status,
-      roleId: 3,
+      roleId: this.userForm.value.roleId,
     };
 
     this.commonService.updateUser(this.selectedUserId!, body).subscribe({
