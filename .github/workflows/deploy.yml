@@ -1,0 +1,40 @@
+name: Deploy to AWS S3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Grab your code from the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Install Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. Install dependencies and build the Angular app
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Angular App
+        run: npm run build
+
+      # 4. Log into AWS using the secrets we saved in GitHub
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # 5. Upload the compiled files to your S3 Bucket and delete the old ones
+      - name: Deploy to S3
+        run: aws s3 sync ./dist/test-management/browser s3://YOUR-BUCKET-NAME --delete
