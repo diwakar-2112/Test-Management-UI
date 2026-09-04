@@ -37,4 +37,4 @@ jobs:
 
       # 5. Upload the compiled files to your S3 Bucket and delete the old ones
       - name: Deploy to S3
-        run: aws s3 sync ./dist/test-management/browser s3://YOUR-BUCKET-NAME --delete
+        run: aws s3 sync ./dist/test-management/browser s3://qa-console-ui --delete
