@@ -59,9 +59,9 @@
         <div class="h-11">
           <p-select
             formControlName="role"
-            [options]="rolesOptions"
-            optionLabel="label"
-            optionValue="value"
+            [options]="rolesOptions()"
+            optionLabel="value"
+            optionValue="id"
             placeholder="All Roles"
             styleClass="w-full h-full custom-select bg-background border-border rounded-xl"
           ></p-select>

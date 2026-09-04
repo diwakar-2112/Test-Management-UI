@@ -1,8 +1,9 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { ApiService } from '../app/core/services/api.service';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import {
   AuthPermissions,
+  DynamicList,
   ModuleRequest,
   ModuleResponse,
   RoleAccess,
@@ -23,21 +24,21 @@ export interface LoginResponse {
 })
 export class CommonService {
   private api = inject(ApiService);
-  private permissions: string[] = [];
+  private permissions = signal<string[]>([]);
   setPermissions(permissions: string[]) {
     console.log(permissions, 'setpermis');
-    this.permissions = permissions;
+    this.permissions.set(permissions);
   }
   hasPermission(permission: string): boolean {
-    console.log(permission, 'this is permi');
-    console.log(this.permissions, 'this is permilist');
-    return this.permissions.includes(permission);
+    // console.log(permission, 'this is permi');
+    // console.log(this.permissions, 'this is permilist');
+    return this.permissions().includes(permission);
   }
   hasAnyPermission(permissions: string[]): boolean {
-    return permissions.some((permission) => this.permissions.includes(permission));
+    return permissions.some((permission) => this.permissions().includes(permission));
   }
   hasAllPermissions(permissions: string[]): boolean {
-    return permissions.every((permission) => this.permissions.includes(permission));
+    return permissions.every((permission) => this.permissions().includes(permission));
   }
   getAllProjects(page: number, size: number, isAll: boolean): Observable<any> {
     return this.api.regularGetRequest<any>('projects', { page, size, isAll });
@@ -336,6 +337,20 @@ export class CommonService {
     return this.api.regularGetRequest<AuthPermissions>(url).pipe(
       tap((res) => {
         console.log('auth permission roles');
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+  getLookups(params?: string): Observable<DynamicList> {
+    let url = `lookups?types=`;
+    if (params) {
+      url += `${params}`;
+    }
+    return this.api.regularGetRequest<DynamicList>(url).pipe(
+      tap((res) => {
+        console.log('lookups');
       }),
       catchError((err) => {
         return throwError(() => err);

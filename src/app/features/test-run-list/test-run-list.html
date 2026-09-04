@@ -112,7 +112,7 @@
         <p-select
           formControlName="projectId"
           [options]="projects()"
-          optionLabel="name"
+          optionLabel="value"
           optionValue="id"
           placeholder="Select Project"
           [showClear]="true"
@@ -464,7 +464,7 @@
             formControlName="project"
             [options]="projects()"
             (onChange)="onChange($event)"
-            optionLabel="name"
+            optionLabel="value"
             optionValue="id"
             appendTo="body"
             [showClear]="true"
