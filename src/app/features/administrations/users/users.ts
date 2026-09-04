@@ -17,7 +17,13 @@ import {
 } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { PaginationComponent } from '../../../core/components/pagination/pagination.component';
-import { PageInfo, UserList as user, UserPayload } from '../../../core/model/model';
+import {
+  DynamicList,
+  Items,
+  PageInfo,
+  UserList as user,
+  UserPayload,
+} from '../../../core/model/model';
 import { UserListResponse } from '../../../core/model/model';
 import { CommonService } from '../../../../services/commonService';
 import { ToastModule } from 'primeng/toast';
@@ -44,6 +50,7 @@ export class Users implements OnInit {
   private messageService = inject(MessageService);
   errorMessage = signal('');
   ngOnInit() {
+    this.getLookups();
     this.getUserList();
     this.filterForm.valueChanges.subscribe(() => {
       this.currentPage.set(0);
@@ -100,12 +107,7 @@ export class Users implements OnInit {
     status: [null as string | null],
   });
 
-  rolesOptions = [
-    { label: 'All Roles', value: null },
-    { label: 'Admin', value: 'Admin' },
-    { label: 'QA Lead', value: 'QA Lead' },
-    { label: 'Tester', value: 'Tester' },
-  ];
+  rolesOptions = signal<Items[]>([]);
 
   statusOptions = [
     { label: 'All Statuses', value: null },
@@ -167,7 +169,7 @@ export class Users implements OnInit {
 
     this.userForm.get('password')?.updateValueAndValidity();
     this.userForm.get('confirmPassword')?.updateValueAndValidity();
-    this.userForm.reset({ status: 'ACTIVE', roleId: 2 });
+    this.userForm.reset({ status: 'ACTIVE', roleId: 3 });
     this.isSlidePanelOpen.set(true);
   }
   saveUser() {
@@ -246,4 +248,14 @@ export class Users implements OnInit {
   }
 
   confirmDelete(userId: any) {}
+  getLookups() {
+    this.commonService.getLookups('roles').subscribe({
+      next: (res: DynamicList) => {
+        if (res) {
+          this.rolesOptions.set(res['roles'] || []);
+          console.log(this.rolesOptions());
+        }
+      },
+    });
+  }
 }

@@ -153,3 +153,11 @@ export interface RoleAccess extends RoleAccessPayload {
 export type RoleAccessResponse = RoleAccess[];
 
 export type AuthPermissions = [];
+
+export interface Items {
+  id: string;
+  value: string;
+}
+export interface DynamicList {
+  [key: string]: Items[];
+}

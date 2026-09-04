@@ -24,8 +24,6 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../core/model/model';
 import { GlobalLoaderService } from '../../core/services/global-loader.service';
 
-
-
 @Component({
   selector: 'app-test-run-list',
   standalone: true,
@@ -106,11 +104,26 @@ export class TestRunList implements OnInit {
   }
 
   loadProjects() {
-    this.commonService.getAllProjects(0, 0,true).subscribe({
+    // this.commonService.getAllProjects(0, 0,true).subscribe({
+    //   next: (res: any) => {
+    //     if (res && res.content) {
+    //       // this.projects.set(res.content);
+    //       console.log('res of old project()',res.content)
+    //     }
+    //   },
+    // });
+    this.commonService.getLookups('projects').subscribe({
       next: (res: any) => {
-        if (res && res.content) {
-          this.projects.set(res.content);
+        if (res) {
+          this.projects.set(res.projects);
+        } else {
+          this.errorMessage.set('Lookups not found');
+          this.showError();
         }
+      },
+      error: (error: any) => {
+        this.errorMessage.set(error.error?.message ?? 'Failed to assign test run');
+        this.showError();
       },
     });
   }
@@ -226,10 +239,10 @@ export class TestRunList implements OnInit {
     this.commonService
       .createTestRun(this.createTestRunForm.getRawValue()?.suite as string, body)
       .subscribe({
-        next: (res:any) => {
+        next: (res: any) => {
           this.messageService.add({
             severity: 'success',
-            summary: `Test Run ${res?.name} added successfully`
+            summary: `Test Run ${res?.name} added successfully`,
           });
           this.getTestRuns();
         },
@@ -318,10 +331,12 @@ export class TestRunList implements OnInit {
     this.commonService.getTestSuites(event?.value, { isAll: true }).subscribe({
       next: (res) => {
         console.log('typeof res.totalTestCases', res);
-        this.createSuiteOptions = (res || []) .filter((elem: any) => elem.totalTestCases > 0).map((elem: any) => ({
-          label: elem.name,
-          value: elem.id,
-        }));
+        this.createSuiteOptions = (res || [])
+          .filter((elem: any) => elem.totalTestCases > 0)
+          .map((elem: any) => ({
+            label: elem.name,
+            value: elem.id,
+          }));
         this.createTestRunForm.get('suite')?.enable();
         // this.isSuiteDisabled.set(false);
       },
