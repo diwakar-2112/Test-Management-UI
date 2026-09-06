@@ -40,6 +40,10 @@ app-modules .p-datatable .p-datatable-tbody > tr > td {
   padding: 1rem 1.5rem !important;
 }
 
+app-modules .p-datatable .p-datatable-tbody {
+  background: rgba(var(--surface-highlight) / 0.5) !important;
+  background-color: rgba(var(--surface-highlight) / 0.5) !important;
+}
 /* 5. Row Hover Effect */
 app-modules .p-datatable .p-datatable-tbody > tr:hover {
   background: rgba(var(--surface-highlight) / 0.5) !important;

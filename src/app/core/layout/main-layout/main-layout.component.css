@@ -1,1 +1,81 @@
 /* Main Layout Styles */
+
+.admin-submenu {
+  animation: adminSubmenuIn 180ms ease-out;
+  transform-origin: top;
+}
+
+@keyframes adminSubmenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scaleY(0.96);
+    max-height: 0;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    max-height: 180px;
+  }
+}
+.admin-submenu {
+  overflow: hidden;
+  animation: adminSubmenuIn 180ms ease-out;
+  transform-origin: top;
+}
+
+.admin-submenu-line {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.admin-submenu-line::before {
+  content: '';
+  position: absolute;
+  left: 0.25rem;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  width: 1px;
+  background: rgba(var(--border) / 0.9);
+}
+
+.admin-submenu-link {
+  position: relative;
+}
+
+.admin-submenu-dot {
+  position: absolute;
+  left: -0.93rem;
+  top: 50%;
+  z-index: 1;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: rgb(var(--border));
+  box-shadow: 0 0 0 4px rgb(var(--surface));
+  transform: translateY(-50%);
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.admin-submenu-link.active .admin-submenu-dot {
+  background: rgb(var(--primary));
+  box-shadow:
+    0 0 0 4px rgb(var(--surface)),
+    0 0 14px rgba(var(--primary) / 0.7);
+  transform: translateY(-50%) scale(1.15);
+}
+
+@keyframes adminSubmenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scaleY(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
