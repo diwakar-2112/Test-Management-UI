@@ -6,7 +6,7 @@ import {
   signal,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ThemeService } from '../../../../services/theme.service';
@@ -18,12 +18,14 @@ import { AuthPermissions } from '../../model/model';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatIconModule],
   templateUrl: './main-layout.component.html',
+  styleUrl: './main-layout.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainLayoutComponent implements OnInit {
   private projectService = inject(CommonService);
   themeService = inject(ThemeService);
   commonService = inject(CommonService);
+  private router = inject(Router);
 
   // Mobile Sidebar State
   isMobileMenuOpen = signal(false);
@@ -84,5 +86,14 @@ export class MainLayoutComponent implements OnInit {
 
   toggleAdminMenu() {
     this.isAdminMenuOpen.update((v) => !v);
+  }
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('acl');
+    window.location.href = '/login';
+  }
+  isAdministrationActive() {
+    return ['/users', '/roles', '/modules'].some((route) => this.router.url.startsWith(route));
   }
 }
