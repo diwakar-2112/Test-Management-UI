@@ -95,7 +95,7 @@ export class TestRunList implements OnInit {
 
   ngOnInit() {
     this.loadProjects();
-    this.getAssigneeLookup();
+    // this.getAssigneeLookup();
     this.getTestRuns();
     this.filterForm.valueChanges.subscribe(() => {
       this.currentPage.set(0);
@@ -116,6 +116,7 @@ export class TestRunList implements OnInit {
       next: (res: any) => {
         if (res) {
           this.projects.set(res.projects);
+          this.users = res.users;
         } else {
           this.errorMessage.set('Lookups not found');
           this.showError();
@@ -321,8 +322,8 @@ export class TestRunList implements OnInit {
   getAssigneeLookup() {
     this.commonService.getAssigneeLookup().subscribe({
       next: (res: User[]) => {
-        this.users = res;
-        console.log(this.users, 'usrs');
+        // this.users = res;
+        // console.log(this.users, 'usrs');
       },
     });
   }
